@@ -9,9 +9,9 @@ import android.view.*;
  * Created by Yulong on 2016/2/4.
  */
 public class file extends Fragment {
-    View rootview;
+    View root_view;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        rootview = inflater.inflate(R.layout.content_file,container, false);
-        return rootview;
+        root_view = inflater.inflate(R.layout.content_file,container, false);
+        return root_view;
     }
 }
