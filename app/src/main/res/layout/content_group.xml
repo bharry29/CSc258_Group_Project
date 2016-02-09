@@ -1,13 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Group"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+        android:text="Groups:"
+        android:id="@+id/textView3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Group A"
+            android:id="@+id/textView4" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="@dimen/group_button_width"
+            android:layout_height="wrap_content"
+            android:text="@string/group_join_button"
+            android:id="@+id/button" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Group B"
+            android:id="@+id/textView5" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="@dimen/group_button_width"
+            android:layout_height="wrap_content"
+            android:text="@string/group_leave_button"
+            android:id="@+id/button2" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Group C"
+            android:id="@+id/textView6" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="@dimen/group_button_width"
+            android:layout_height="wrap_content"
+            android:text="@string/group_delete_button"
+            android:id="@+id/button3" />
+
+    </LinearLayout>
+</LinearLayout>
