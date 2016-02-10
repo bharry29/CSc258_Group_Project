@@ -3,4 +3,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
+
+    <string name="group_join_button">Join</string>
+    <string name="group_leave_button">Leave</string>
+    <string name="group_delete_button">Delete</string>
 </resources>
