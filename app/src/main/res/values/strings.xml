@@ -9,4 +9,5 @@
     <string name="group_join_button">Join</string>
     <string name="group_leave_button">Leave</string>
     <string name="group_delete_button">Delete</string>
+    <string name="group_create_button">Create New Group</string>
 </resources>

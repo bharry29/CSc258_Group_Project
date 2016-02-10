@@ -28,7 +28,6 @@
             android:id="@+id/textView4" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="@dimen/group_button_width"
             android:layout_height="wrap_content"
             android:text="@string/group_join_button"
@@ -50,7 +49,6 @@
             android:id="@+id/textView5" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="@dimen/group_button_width"
             android:layout_height="wrap_content"
             android:text="@string/group_leave_button"
@@ -73,11 +71,24 @@
             android:id="@+id/textView6" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="@dimen/group_button_width"
             android:layout_height="wrap_content"
             android:text="@string/group_delete_button"
-            android:id="@+id/button3" />
+            android:id="@+id/btnDelete" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/group_create_button"
+        android:id="@+id/btnCreate" />
 
     </LinearLayout>
 </LinearLayout>
