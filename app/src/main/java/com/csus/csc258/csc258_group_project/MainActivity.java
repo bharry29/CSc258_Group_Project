@@ -1,7 +1,9 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -49,9 +51,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerview = navigationView.getHeaderView(0);
-        TextView user_id = (TextView)headerview.findViewById(R.id.user_id);
         String device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        user_id.setText(device_id);
+        SharedPreferences setting = getPreferences(Activity.MODE_PRIVATE);
+        String username = setting.getString("username_key", device_id);
+        TextView user_id = (TextView)headerview.findViewById(R.id.user_id);
+        user_id.setText(username);
         navigationView.setNavigationItemSelectedListener(this);
         //setContentView(R.layout.nav_header_main);
 
