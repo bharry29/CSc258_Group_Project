@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/llGroupMain">
+
 
     <TextView
         android:layout_width="match_parent"
@@ -11,27 +13,78 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Groups:"
-        android:id="@+id/textView3" />
+        android:id="@+id/txtHeading" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:id="@+id/llGroupList">
 
-
-        <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Group A"
-            android:id="@+id/textView4" />
+            android:orientation="horizontal">
 
-        <Button
-            android:layout_width="@dimen/group_button_width"
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Group A"
+                android:id="@+id/textView4" />
+
+            <Button
+                android:layout_width="@dimen/group_button_width"
+                android:layout_height="wrap_content"
+                android:text="@string/group_join_button"
+                android:id="@+id/button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/group_join_button"
-            android:id="@+id/button" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Group B"
+                android:id="@+id/textView5" />
+
+            <Button
+                android:layout_width="@dimen/group_button_width"
+                android:layout_height="wrap_content"
+                android:text="@string/group_leave_button"
+                android:id="@+id/button2" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Group C"
+                android:id="@+id/textView6" />
+
+            <Button
+                android:layout_width="@dimen/group_button_width"
+                android:layout_height="wrap_content"
+                android:text="@string/group_delete_button"
+                android:id="@+id/btnDelete" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -40,55 +93,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Group B"
-            android:id="@+id/textView5" />
-
-        <Button
-            android:layout_width="@dimen/group_button_width"
-            android:layout_height="wrap_content"
-            android:text="@string/group_leave_button"
-            android:id="@+id/button2" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Group C"
-            android:id="@+id/textView6" />
-
-        <Button
-            android:layout_width="@dimen/group_button_width"
-            android:layout_height="wrap_content"
-            android:text="@string/group_delete_button"
-            android:id="@+id/btnDelete" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-    <Button
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text="@string/group_create_button"
-        android:id="@+id/btnCreate" />
+            android:text="@string/group_create_button"
+            android:id="@+id/btnCreate" />
 
     </LinearLayout>
 </LinearLayout>
