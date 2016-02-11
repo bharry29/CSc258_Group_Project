@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.content.Context;
 import android.provider.Settings;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.FloatingActionButton;
@@ -23,14 +24,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    @Override
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static String device_id ;
+    public static View headerview;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView tv = (TextView)findViewById(R.id.user_id);
-        if(tv != null )tv.setText("aaa");
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,20 +41,23 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        headerview = navigationView.getHeaderView(0);
+        device_id=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            public void onDrawerOpened(View drawerView){
+                super.onDrawerOpened(drawerView);
+                SharedPreferences setting = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                String username = setting.getString("username", device_id);
+                TextView user_id = (TextView)headerview.findViewById(R.id.user_id);
+                user_id.setText(username);
+            }
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerview = navigationView.getHeaderView(0);
-        String device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        SharedPreferences setting = getPreferences(Activity.MODE_PRIVATE);
-        String username = setting.getString("username_key", device_id);
-        TextView user_id = (TextView)headerview.findViewById(R.id.user_id);
-        user_id.setText(username);
         navigationView.setNavigationItemSelectedListener(this);
         //setContentView(R.layout.nav_header_main);
 
@@ -100,6 +102,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+
         if (id == R.id.nav_gallery) {
             displayView(R.id.nav_gallery);
         } else if (id == R.id.nav_manage) {
@@ -109,6 +113,9 @@ public class MainActivity extends AppCompatActivity
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+
+
         return true;
     }
 
