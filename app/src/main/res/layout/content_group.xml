@@ -28,16 +28,12 @@
 
 
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/GroupName"
                 android:text="Group A"
                 android:id="@+id/textView4" />
 
             <Button
-                android:layout_width="@dimen/group_button_width"
-                android:layout_height="wrap_content"
+                style="@style/MediumButton"
                 android:text="@string/group_join_button"
                 android:id="@+id/button" />
 
@@ -49,16 +45,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/GroupName"
                 android:text="Group B"
                 android:id="@+id/textView5" />
 
             <Button
-                android:layout_width="@dimen/group_button_width"
-                android:layout_height="wrap_content"
+                style="@style/MediumButton"
                 android:text="@string/group_leave_button"
                 android:id="@+id/button2" />
 
@@ -71,16 +63,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/GroupName"
                 android:text="Group C"
                 android:id="@+id/textView6" />
 
             <Button
-                android:layout_width="@dimen/group_button_width"
-                android:layout_height="wrap_content"
+                style="@style/MediumButton"
                 android:text="@string/group_delete_button"
                 android:id="@+id/btnDelete" />
 

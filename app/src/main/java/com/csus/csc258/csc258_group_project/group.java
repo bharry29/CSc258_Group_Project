@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Group Editor Fragment
  * @author bwhite
@@ -17,8 +19,14 @@ import android.widget.TextView;
 public class group extends Fragment implements View.OnClickListener {
     View root_view;
 
+    private ArrayList<Button> bDeleteButtons;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         root_view = inflater.inflate(R.layout.content_group,container, false);
+
+        bDeleteButtons = new ArrayList<>();
+
+        bDeleteButtons.add((Button)root_view.findViewById(R.id.btnDelete));
 
         Button b = (Button) root_view.findViewById(R.id.btnCreate);
         b.setOnClickListener(this);
@@ -29,12 +37,19 @@ public class group extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-            // The "Create new Group" button was pressed
-            case R.id.btnCreate:
-                createGroup();
-                break;
+        // The "Create new Group" button was pressed
+        if(v.getId() == R.id.btnCreate)
+            createGroup();
+
+        // A delete button was pressed
+        if(bDeleteButtons.contains(v)) {
+            bDeleteButtons.remove(v); // Remove from collection
+            // Remove from layout
+            LinearLayout lGroup = (LinearLayout) v.getParent();
+            LinearLayout lContainer = (LinearLayout) lGroup.getParent();
+            lContainer.removeView(lGroup);
         }
+
     }
 
     private void createGroup() {
@@ -46,13 +61,15 @@ public class group extends Fragment implements View.OnClickListener {
         lNewGroup.setOrientation(LinearLayout.HORIZONTAL);
 
         // Create a new group name
-        TextView txtGroupName = new TextView(root_view.getContext());
-        txtGroupName.setText("New Group");
+        TextView txtGroupName = new TextView(root_view.getContext(), null, R.style.GroupName);
+        txtGroupName.setText("Test New Group");
         lNewGroup.addView(txtGroupName);
 
         // Create a new delete button
-        Button bDelete = new Button(root_view.getContext());
-        bDelete.setText("Delete");
+        Button bDelete = new Button(root_view.getContext(), null, R.style.MediumButton);
+        bDelete.setText(getString(R.string.group_delete_button));
+        bDelete.setOnClickListener(this);
+        bDeleteButtons.add(bDelete);
         lNewGroup.addView(bDelete);
 
         // Add the new group to the list of groups
