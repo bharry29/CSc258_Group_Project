@@ -1,8 +1,10 @@
 package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearSmoothScroller;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +26,12 @@ public class group extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         root_view = inflater.inflate(R.layout.content_group,container, false);
 
+        // Setup view objects
         bDeleteButtons = new ArrayList<>();
-
         bDeleteButtons.add((Button)root_view.findViewById(R.id.btnDelete));
-
         Button b = (Button) root_view.findViewById(R.id.btnCreate);
         b.setOnClickListener(this);
+
 
         return root_view;
     }
@@ -61,12 +63,12 @@ public class group extends Fragment implements View.OnClickListener {
         lNewGroup.setOrientation(LinearLayout.HORIZONTAL);
 
         // Create a new group name
-        TextView txtGroupName = new TextView(root_view.getContext(), null, R.style.GroupName);
+        TextView txtGroupName = new TextView(new ContextThemeWrapper(root_view.getContext(), R.style.GroupName));
         txtGroupName.setText("Test New Group");
         lNewGroup.addView(txtGroupName);
 
         // Create a new delete button
-        Button bDelete = new Button(root_view.getContext(), null, R.style.MediumButton);
+        Button bDelete = new Button(new ContextThemeWrapper(root_view.getContext(), R.style.MediumButton));
         bDelete.setText(getString(R.string.group_delete_button));
         bDelete.setOnClickListener(this);
         bDeleteButtons.add(bDelete);
