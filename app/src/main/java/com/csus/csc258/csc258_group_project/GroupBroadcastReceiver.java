@@ -15,7 +15,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver {
     private MainActivity mActivity;
 
     public GroupBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       MainActivity activity) {
+                                  MainActivity activity) {
         super();
         mManager = manager;
         mChannel = channel;

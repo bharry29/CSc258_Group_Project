@@ -1,18 +1,13 @@
 package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
