@@ -21,72 +21,28 @@
         android:orientation="vertical"
         android:id="@+id/llGroupList">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-            <TextView
-                style="@style/GroupName"
-                android:text="Group A"
-                android:id="@+id/textView4" />
-
-            <Button
-                style="@style/MediumButton"
-                android:text="@string/group_join_button"
-                android:id="@+id/button" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/GroupName"
-                android:text="Group B"
-                android:id="@+id/textView5" />
-
-            <Button
-                style="@style/MediumButton"
-                android:text="@string/group_leave_button"
-                android:id="@+id/button2" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/GroupName"
-                android:text="Group C"
-                android:id="@+id/textView6" />
-
-            <Button
-                style="@style/MediumButton"
-                android:text="@string/group_delete_button"
-                android:id="@+id/btnDelete" />
-
-        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="right|bottom">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <ImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_refresh"
+            android:id="@+id/btnRefresh"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_group"
             android:text="@string/group_create_button"
-            android:id="@+id/btnCreate" />
+            android:id="@+id/btnCreate"/>
 
     </LinearLayout>
 </LinearLayout>

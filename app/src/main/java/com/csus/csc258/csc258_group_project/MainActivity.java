@@ -1,19 +1,14 @@
 package com.csus.csc258.csc258_group_project;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.app.FragmentTransaction;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.content.Context;
 import android.provider.Settings;
-import android.support.design.internal.NavigationMenuItemView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -56,14 +51,6 @@ public class MainActivity extends AppCompatActivity
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerview = navigationView.getHeaderView(0);
         device_id=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -163,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (viewId) {
             case R.id.nav_share:
-                fragment = new group();
+                fragment = new GroupView();
                 title = "Group";
                 break;
             case R.id.nav_gallery:
