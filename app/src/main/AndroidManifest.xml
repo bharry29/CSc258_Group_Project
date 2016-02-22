@@ -3,7 +3,7 @@
     package="com.csus.csc258.csc258_group_project">
 
     <!-- requirements for wifi peer to peer functionality -->
-    <uses-sdk android:minSdkVersion="14" />
+    <uses-sdk android:minSdkVersion="17" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />

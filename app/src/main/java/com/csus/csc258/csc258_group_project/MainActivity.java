@@ -1,5 +1,6 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
@@ -20,8 +21,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, TextDialogBox.TextDialogListener {
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static String device_id ;
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity
     private WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
+
+    // Collection of groups
+    private ArrayList<Group> mGroups;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +56,9 @@ public class MainActivity extends AppCompatActivity
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        // Initialize groups
+        mGroups = new ArrayList<>();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerview = navigationView.getHeaderView(0);
@@ -71,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //setContentView(R.layout.nav_header_main);
 
-        displayView(R.id.nav_share);
+        displayView(R.id.nav_group);
     }
 
     // Register the broadcast receiver with the intent values to be matched
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.nav_share) {
+        if (id == R.id.nav_group) {
             return true;
         }
 
@@ -128,12 +137,12 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        if (id == R.id.nav_gallery) {
-            displayView(R.id.nav_gallery);
-        } else if (id == R.id.nav_manage) {
-            displayView(R.id.nav_manage);
-        } else if (id == R.id.nav_share) {
-            displayView(R.id.nav_share);
+        if (id == R.id.nav_group) {
+            displayView(R.id.nav_group);
+        } else if (id == R.id.nav_file) {
+            displayView(R.id.nav_file);
+        } else if (id == R.id.nav_settings) {
+            displayView(R.id.nav_settings);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -149,15 +158,15 @@ public class MainActivity extends AppCompatActivity
         String title = getString(R.string.app_name);
 
         switch (viewId) {
-            case R.id.nav_share:
+            case R.id.nav_group:
                 fragment = new GroupView();
                 title = "Group";
                 break;
-            case R.id.nav_gallery:
+            case R.id.nav_file:
                 fragment = new file();
                 title = "File";
                 break;
-            case R.id.nav_manage:
+            case R.id.nav_settings:
                 fragment = new setting();
                 title = "Setting";
                 break;
@@ -179,4 +188,24 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public ArrayList<Group> getGroups() {
+        return mGroups;
+    }
+
+    public void deleteGroup(Group group) {
+        mGroups.remove(group);
+        displayView(R.id.nav_group);
+    }
+
+    /**
+     * Catches the "OK" event from a TextDialog box. This is used for creating new
+     * groups
+     * @param dialog Reference to the dialog box
+     * @param input The text string that the user input
+     */
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, String input) {
+        mGroups.add(new Group(GroupStatus.OWNED, input));
+        displayView(R.id.nav_group);
+    }
 }

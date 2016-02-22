@@ -8,4 +8,6 @@
     <string name="group_leave_button">Leave</string>
     <string name="group_delete_button">Delete</string>
     <string name="group_create_button">Create New Group</string>
+    <string name="group_create_title">New Group</string>
+    <string name="group_create_prompt">Group Name</string>
 </resources>
