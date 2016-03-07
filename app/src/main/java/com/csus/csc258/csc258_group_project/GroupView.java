@@ -51,14 +51,18 @@ public class GroupView extends Fragment implements View.OnClickListener {
             newGroupWindow.setTitle(getResources().getString(R.string.group_create_title));
             newGroupWindow.show(getFragmentManager(), "groupName");
         }
-
-        // See if the view id is one of the groups
-        for(Group g : ((MainActivity)getActivity()).getGroups()) {
-            if(g.getId() == v.getId()) {
-                Button b = (Button)v;
-                // Delete button was pressed
-                if(b.getText().equals(getString(R.string.group_delete_button)))
-                    ((MainActivity) getActivity()).deleteGroup(g);
+        else if(v.getId() == R.id.btnRefresh) {
+            ((MainActivity) getActivity()).refreshPeers();
+        }
+        else {
+            // See if the view id is one of the groups
+            for (Group g : ((MainActivity) getActivity()).getGroups()) {
+                if (g.getId() == v.getId()) {
+                    Button b = (Button) v;
+                    // Delete button was pressed
+                    if (b.getText().equals(getString(R.string.group_delete_button)))
+                        ((MainActivity) getActivity()).deleteGroup(g);
+                }
             }
         }
 

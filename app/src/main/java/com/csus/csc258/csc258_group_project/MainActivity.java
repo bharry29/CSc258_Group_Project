@@ -10,6 +10,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.content.Context;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,11 +31,15 @@ public class MainActivity extends AppCompatActivity
     public static String device_id ;
     public static View headerview;
 
+    // For debug
+    private static final String TAG = "MainActivity";
+
     // Used for WiFi framework
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
+    private boolean mWifiP2PEnabled = false;
 
     // Collection of groups
     private ArrayList<Group> mGroups;
@@ -152,6 +157,14 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void setIsWifiP2PEnabled(boolean wifiP2PEnabled) {
+        mWifiP2PEnabled = wifiP2PEnabled;
+    }
+
+    public boolean getIsWifiP2PEnabled() {
+        return mWifiP2PEnabled;
+    }
+
     public void displayView(int viewId) {
 
         Fragment fragment = null;
@@ -188,6 +201,33 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void refreshPeers() {
+        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "Successfully discovered peers");
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                switch (reason) {
+                    case WifiP2pManager.BUSY:
+                        Log.w(TAG, "Cannot discover peers: Busy");
+                        break;
+                    case WifiP2pManager.P2P_UNSUPPORTED:
+                        Log.w(TAG, "Cannot discover peers: P2P Unsupported");
+                        break;
+                    case WifiP2pManager.ERROR:
+                        Log.w(TAG, "Cannot discover peers: Error");
+                        break;
+                    default:
+                        Log.w(TAG, "Cannot discover peers: Unknown Issue");
+                }
+            }
+        });
+    }
+
     public ArrayList<Group> getGroups() {
         return mGroups;
     }
@@ -205,7 +245,8 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String input) {
-        mGroups.add(new Group(GroupStatus.OWNED, input));
+        mGroups.add(new Group(GroupStatus.OWNED, input,
+                Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)));
         displayView(R.id.nav_group);
     }
 }
