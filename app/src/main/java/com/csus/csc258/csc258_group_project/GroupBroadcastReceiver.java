@@ -51,7 +51,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
             } else {
                 mActivity.setIsWifiP2PEnabled(false);
             }
-            Log.d(TAG, "Wif State: " + (mActivity.getIsWifiP2PEnabled() ? "Enabled" : "Disabled"));
+            Log.d(TAG, "Wifi State: " + (mActivity.getIsWifiP2PEnabled() ? "Enabled" : "Disabled"));
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             mManager.requestPeers(mChannel, this);
             Log.d(TAG, "P2P peers changed");
@@ -105,6 +105,8 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
 
         } else if (info.groupFormed) {
             // Create client thread
+
+            //new SocketServerTask().doInBackground()
         }
     }
 
