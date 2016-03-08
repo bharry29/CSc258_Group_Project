@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,16 @@ public class MainActivity extends AppCompatActivity
 
     // Collection of groups
     private ArrayList<Group> mGroups;
+
+    public ArrayList<String> groupNamesList()
+    {
+        ArrayList<String> groupNamesList = new ArrayList<String>();
+        for (Group g: mGroups) {
+            groupNamesList.add(g.getName());
+        }
+        return groupNamesList;
+    }
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +97,9 @@ public class MainActivity extends AppCompatActivity
         //setContentView(R.layout.nav_header_main);
 
         displayView(R.id.nav_group);
+
+//        mFiles = new ArrayList<>();
+//        displayView(R.id.nav_file);
     }
 
     // Register the broadcast receiver with the intent values to be matched
@@ -176,7 +190,7 @@ public class MainActivity extends AppCompatActivity
                 title = "Group";
                 break;
             case R.id.nav_file:
-                fragment = new file();
+                fragment = new FileView();
                 title = "File";
                 break;
             case R.id.nav_settings:
@@ -217,6 +231,7 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case WifiP2pManager.P2P_UNSUPPORTED:
                         Log.w(TAG, "Cannot discover peers: P2P Unsupported");
+                        Toast.makeText(MainActivity.this, "Cannot discover peers", Toast.LENGTH_SHORT).show();
                         break;
                     case WifiP2pManager.ERROR:
                         Log.w(TAG, "Cannot discover peers: Error");

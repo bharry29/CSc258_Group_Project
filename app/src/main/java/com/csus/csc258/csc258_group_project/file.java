@@ -1,17 +1,33 @@
 package com.csus.csc258.csc258_group_project;
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.*;
+import android.view.View;
 
 /**
- * Created by Yulong on 2016/2/4.
+ * Created by bharr on 3/1/2016.
  */
-public class file extends Fragment {
-    View root_view;
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        root_view = inflater.inflate(R.layout.content_file,container, false);
-        return root_view;
+    public class File
+    {
+        private String mFileName;
+
+        // The id of the file
+        private int mFId;
+
+        /**
+         * Create a new file object
+         * @param name The name of the file
+         */
+        public File(String name) {
+            mFileName = name;
+            mFId = View.generateViewId();
+        }
+
+        /**
+         * Gets the name of the group
+         * @return The name of the group
+         */
+        public String getFileName() {
+            return mFileName;
+        }
+
+        public int getFileId() { return mFId; }
     }
-}

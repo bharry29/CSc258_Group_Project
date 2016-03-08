@@ -3,6 +3,10 @@ package com.csus.csc258.csc258_group_project;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +24,10 @@ enum GroupStatus {OWNED, JOINED, AVAILABLE}
  * @author Ben White
  */
 public class Group {
+
+
+    // Collection of files
+    private ArrayList<File> mFiles;
 
     // The name of the group
     private String mGroupName;
@@ -47,6 +55,7 @@ public class Group {
         mGroupName = name;
         mDeviceOwnerID = deviceOwnerID;
         mId = View.generateViewId();
+        mFiles = new ArrayList<>();
     }
 
     /**
@@ -87,5 +96,35 @@ public class Group {
         return jsonData;
     }
 
+
+    public ArrayList<File> getFiles() {
+        return mFiles;
+    }
+
+    public void deleteFiles(ArrayList<File> files) {
+        mFiles.removeAll(files);
+    }
+
+    public void deleteFile(File file) {
+        mFiles.remove(file);
+    }
+
+    public void addFile(File file) {
+        mFiles.add(file);
+    }
+
+    public void addFiles(ArrayList<File> files) {
+        mFiles.addAll(files);
+    }
+
     public int getId() { return mId; }
+
+    public ArrayList<String> groupNamesList()
+    {
+        ArrayList<Group> groupsList = new ArrayList<Group>();
+        ArrayList<String> groupNamesList = new ArrayList<String>();
+        for (Group g: groupsList)
+            groupNamesList.add(g.getName());
+        return groupNamesList;
+    }
 }

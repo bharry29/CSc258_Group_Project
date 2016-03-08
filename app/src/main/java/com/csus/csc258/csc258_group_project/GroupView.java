@@ -65,7 +65,6 @@ public class GroupView extends Fragment implements View.OnClickListener {
                 }
             }
         }
-
     }
 
     private void createGroup(String input, int id) {

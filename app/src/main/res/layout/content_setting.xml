@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Change user ID:"
-        android:id="@+id/textView2"
+        android:id="@+id/textFileHeading"
         android:layout_marginTop="31dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -28,9 +28,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="New ID:"
         android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
+        android:layout_below="@+id/textFileHeading"
+        android:layout_alignLeft="@+id/textFileHeading"
+        android:layout_alignStart="@+id/textFileHeading"
         android:layout_marginTop="21dp" />
     <EditText
         android:id="@+id/edit_id"
