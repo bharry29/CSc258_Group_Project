@@ -10,20 +10,21 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Ben on 3/6/2016.
  */
 public class SocketServerThread extends Thread {
-    private int mServerSocketPort;
-    private List<String> mClientIPs;
+    private int mServerSocketPort = 8888;
+    private List<String> mClientIPs = new ArrayList<>();
 
     private static final String TAG = "SocketServerThread";
 
     @Override
     public void run() {
-        Socket socket = null;
+        Socket client = null;
         DataInputStream dataInputStream = null;
         DataOutputStream dataOutputStream = null;
 
@@ -32,19 +33,23 @@ public class SocketServerThread extends Thread {
             ServerSocket serverSocket = new ServerSocket(mServerSocketPort);
 
             while (true) {
-                socket = serverSocket.accept();
+                client = serverSocket.accept();
                 dataInputStream = new DataInputStream(
-                        socket.getInputStream());
+                        client.getInputStream());
                 dataOutputStream = new DataOutputStream(
-                        socket.getOutputStream());
+                        client.getOutputStream());
 
                 String messageFromClient, messageToClient, request;
+
+                // Wait for client to send groups that they own
+
+                // Send groups that the server owns
 
                 //If no message sent from client, this code will block the program
                 messageFromClient = dataInputStream.readUTF();
 
                 final JSONObject jsondata;
-                
+
                 try {
                     jsondata = new JSONObject(messageFromClient);
                     request = jsondata.getString("request");
@@ -70,9 +75,9 @@ public class SocketServerThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (socket != null) {
+            if (client != null) {
                 try {
-                    socket.close();
+                    client.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -27,7 +27,7 @@ public class Group {
 
 
     // Collection of files
-    private ArrayList<File> mFiles;
+    private List<File> mFiles;
 
     // The name of the group
     private String mGroupName;
@@ -97,11 +97,11 @@ public class Group {
     }
 
 
-    public ArrayList<File> getFiles() {
+    public List<File> getFiles() {
         return mFiles;
     }
 
-    public void deleteFiles(ArrayList<File> files) {
+    public void deleteFiles(List<File> files) {
         mFiles.removeAll(files);
     }
 
@@ -113,16 +113,16 @@ public class Group {
         mFiles.add(file);
     }
 
-    public void addFiles(ArrayList<File> files) {
+    public void addFiles(List<File> files) {
         mFiles.addAll(files);
     }
 
     public int getId() { return mId; }
 
-    public ArrayList<String> groupNamesList()
+    public List<String> groupNamesList()
     {
-        ArrayList<Group> groupsList = new ArrayList<Group>();
-        ArrayList<String> groupNamesList = new ArrayList<String>();
+        List<Group> groupsList = new ArrayList<>();
+        List<String> groupNamesList = new ArrayList<>();
         for (Group g: groupsList)
             groupNamesList.add(g.getName());
         return groupNamesList;

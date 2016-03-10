@@ -13,6 +13,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,10 +56,9 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             mManager.requestPeers(mChannel, this);
             Log.d(TAG, "P2P peers changed");
-            updatePeers();
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
-            NetworkInfo networkInfo = (NetworkInfo) intent
+            NetworkInfo networkInfo = intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
             if(networkInfo != null && networkInfo.isConnected()) {
@@ -74,7 +74,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         }
     }
 
-    private void updatePeers() {
+    private void connectToPeers() {
         for(Object o : mPeers) {
             final WifiP2pDevice device = (WifiP2pDevice) o;
 
@@ -100,21 +100,26 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         // After the group negotiation, we can determine the group owner.
-        if (info.groupFormed && info.isGroupOwner) {
-            // Create server thread
+        if(info.groupFormed) {
+            if (info.isGroupOwner) {
+                // Open a server socket
 
-        } else if (info.groupFormed) {
-            // Create client thread
+            } else {
+                // Open a socket to the group owner
+                InetAddress groupOwnerAdd = info.groupOwnerAddress;
 
-            //new SocketServerTask().doInBackground()
+                //new SocketClientTask().doInBackground()
+            }
         }
     }
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
         mPeers.clear();
-        if(peerList != null && peerList.getDeviceList() != null)
+        if(peerList != null && peerList.getDeviceList() != null) {
             mPeers.addAll(peerList.getDeviceList());
+            connectToPeers();
+        }
 
         if(mPeers.size() == 0)
             Log.d(TAG, "No devices found");

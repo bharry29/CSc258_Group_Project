@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TextDialogBox.TextDialogListener {
@@ -43,11 +44,11 @@ public class MainActivity extends AppCompatActivity
     private boolean mWifiP2PEnabled = false;
 
     // Collection of groups
-    private ArrayList<Group> mGroups;
+    private List<Group> mGroups;
 
-    public ArrayList<String> groupNamesList()
+    public List<String> groupNamesList()
     {
-        ArrayList<String> groupNamesList = new ArrayList<String>();
+        List<String> groupNamesList = new ArrayList<>();
         for (Group g: mGroups) {
             groupNamesList.add(g.getName());
         }
@@ -243,7 +244,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public ArrayList<Group> getGroups() {
+    public List<Group> getGroups() {
         return mGroups;
     }
 

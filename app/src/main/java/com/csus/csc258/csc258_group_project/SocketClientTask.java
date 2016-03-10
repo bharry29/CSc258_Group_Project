@@ -12,9 +12,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 /**
- * Created by Ben on 3/6/2016.
+ * The client-side socket communication
+ * @author Ben White
  */
-public class SocketServerTask extends AsyncTask<JSONObject, Void, Void> {
+public class SocketClientTask extends AsyncTask<JSONObject, Void, Void> {
     private JSONObject mJSONData;
     private boolean mSuccess;
 
@@ -22,9 +23,9 @@ public class SocketServerTask extends AsyncTask<JSONObject, Void, Void> {
     private int mHostPort;
 
     // For debugging
-    private static final String TAG = "SocketServerTask";
+    private static final String TAG = "SocketClientTask";
 
-    public SocketServerTask(InetAddress hostAddress, int hostPort) {
+    public SocketClientTask(InetAddress hostAddress, int hostPort) {
         mHostAddress = hostAddress;
         mHostPort = hostPort;
     }
@@ -42,6 +43,10 @@ public class SocketServerTask extends AsyncTask<JSONObject, Void, Void> {
 
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
+
+            // Send groups that the client owns
+
+            // Wait for the server to send groups that they own
 
             // Transfer JSON object as String to the Server
             dataOutputStream.writeUTF(mJSONData.toString());
