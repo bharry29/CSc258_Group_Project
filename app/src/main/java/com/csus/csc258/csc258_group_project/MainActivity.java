@@ -1,11 +1,15 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
@@ -24,9 +28,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
+import java.net.HttpURLConnection;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TextDialogBox.TextDialogListener {
@@ -63,6 +71,24 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //Check network connection
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // fetch data
+        } else {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Internet Connection")
+                    .setMessage("Check your internet connection.")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
 
         // Setup WiFi framework
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
