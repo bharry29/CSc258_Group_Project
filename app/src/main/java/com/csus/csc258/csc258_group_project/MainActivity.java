@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +98,11 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         //setContentView(R.layout.nav_header_main);
+        //folder located at /data/data/com.csus.csc258.csc258_group_project/files
+        String dirPath = getFilesDir().getAbsolutePath() + File.separator + device_id;
+        File projDir = new File(dirPath);
+        if (!projDir.exists())
+            projDir.mkdirs();
 
         displayView(R.id.nav_group);
 
