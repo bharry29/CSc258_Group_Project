@@ -35,7 +35,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
         // Display the group objects
         MainActivity activity = (MainActivity)getActivity();
         for(Group g : activity.getGroups()) {
-            createGroup(g.getName(), g.getId());
+            createGroup(g.getName(), g.getId(), g.getStatus());
         }
 
 
@@ -67,7 +67,21 @@ public class GroupView extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void createGroup(String input, int id) {
+    private void createGroup(String input, int id, GroupStatus status) {
+
+        String buttonName = "";
+
+        switch (status) {
+            case OWNED:
+                buttonName = getString(R.string.group_delete_button);
+                break;
+            case AVAILABLE:
+                buttonName = getString(R.string.group_join_button);
+                break;
+            case JOINED:
+                buttonName = getString(R.string.group_leave_button);
+                break;
+        }
 
         // Get the layout for the list of views
         LinearLayout lGroupList = (LinearLayout) root_view.findViewById(R.id.llGroupList);
@@ -90,13 +104,13 @@ public class GroupView extends Fragment implements View.OnClickListener {
                 .LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         lNewGroup.addView(txtGroupName);
 
-        // Create a new delete button
-        Button bDelete = new Button(root_view.getContext());
-        bDelete.setText(getString(R.string.group_delete_button));
-        bDelete.setOnClickListener(this);
-        bDelete.setWidth((int) getResources().getDimension(R.dimen.group_button_width));
-        bDelete.setId(id);
-        lNewGroup.addView(bDelete);
+        // Create a new action button
+        Button bButton = new Button(root_view.getContext());
+        bButton.setText(buttonName);
+        bButton.setOnClickListener(this);
+        bButton.setWidth((int) getResources().getDimension(R.dimen.group_button_width));
+        bButton.setId(id);
+        lNewGroup.addView(bButton);
 
         // Add the new GroupView to the list of groups
         lGroupList.addView(lNewGroup);

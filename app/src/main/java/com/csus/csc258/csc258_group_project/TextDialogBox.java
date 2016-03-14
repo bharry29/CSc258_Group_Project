@@ -23,7 +23,7 @@ public class TextDialogBox extends DialogFragment {
     // The activity that creates an instance of this dialog must
     // implement this interface in order to receive event callbacks
     public interface TextDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, String input);
+        void onDialogPositiveClick(DialogFragment dialog, String input);
     }
 
     private TextDialogListener mListener;
@@ -31,6 +31,8 @@ public class TextDialogBox extends DialogFragment {
     public void setTitle(String title) {
         mTitle = title;
     }
+
+    public String getTitle() { return  mTitle; }
 
     public void setHint(String hint) {
         mHint = hint;

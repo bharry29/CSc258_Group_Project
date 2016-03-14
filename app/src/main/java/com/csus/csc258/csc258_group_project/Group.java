@@ -1,13 +1,9 @@
 package com.csus.csc258.csc258_group_project;
 
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +35,7 @@ public class Group {
     private int mId;
 
     // The device owner id
-    private String mDeviceOwnerID;
+    private String mDeviceAddress;
 
     // For debugging
     private static final String TAG = "Group";
@@ -48,12 +44,13 @@ public class Group {
      * Create a new group object
      * @param status The status of the group (owned, joined or available)
      * @param name The name of the group
+     * @param deviceAddress The MAC address of the owner of the group
      * @see GroupStatus
      */
-    public Group(GroupStatus status, String name, String deviceOwnerID) {
+    public Group(GroupStatus status, String name, String deviceAddress) {
         mStatus = status;
         mGroupName = name;
-        mDeviceOwnerID = deviceOwnerID;
+        mDeviceAddress = deviceAddress;
         mId = View.generateViewId();
         mFiles = new ArrayList<>();
     }
@@ -68,7 +65,7 @@ public class Group {
      * Gets the id of the device that owns the group
      * @return The ID of the device that owns the group
      */
-    public String getDeviceOwnerID() { return mDeviceOwnerID; }
+    public String getDeviceOwnerID() { return mDeviceAddress; }
 
     /**
      * Gets the status of the group
@@ -86,7 +83,7 @@ public class Group {
             jsonData.put("groupName", mGroupName);
             jsonData.put("status", mStatus);
             jsonData.put("groupID", mId);
-            jsonData.put("deviceOwnerID", mDeviceOwnerID);
+            jsonData.put("deviceAddress", mDeviceAddress);
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "Coultn't create JSON object");

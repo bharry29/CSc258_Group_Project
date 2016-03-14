@@ -78,9 +78,18 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         for(Object o : mPeers) {
             final WifiP2pDevice device = (WifiP2pDevice) o;
 
+            ExchangeGroupsClient client =
+                    new ExchangeGroupsClient(device.deviceAddress, 8888, mActivity);
+            client.doInBackground(mActivity.getGroups());
+
+
+            /* Commenting out, not going to use the p2p connection manager
+             * for group communication
+
             WifiP2pConfig config = new WifiP2pConfig();
             config.deviceAddress = device.deviceAddress;
             config.wps.setup = WpsInfo.PBC;
+
 
             mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
                 @Override
@@ -94,6 +103,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
                             Toast.LENGTH_SHORT).show();
                 }
             });
+            */
         }
     }
 
@@ -108,7 +118,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
                 // Open a socket to the group owner
                 InetAddress groupOwnerAdd = info.groupOwnerAddress;
 
-                //new SocketClientTask().doInBackground()
+                //new ExchangeGroupsClient().doInBackground()
             }
         }
     }

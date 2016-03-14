@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.content.Context;
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity
 
         displayView(R.id.nav_group);
 
+        // Start the exhange groups server
+        (new ExchangeGroupsServer(this)).start();
+
+
 //        mFiles = new ArrayList<>();
 //        displayView(R.id.nav_file);
     }
@@ -107,6 +112,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        // Register Broadcast Receiver
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -226,13 +232,13 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(int reason) {
+                Toast.makeText(MainActivity.this, "Cannot discover peers", Toast.LENGTH_SHORT).show();
                 switch (reason) {
                     case WifiP2pManager.BUSY:
                         Log.w(TAG, "Cannot discover peers: Busy");
                         break;
                     case WifiP2pManager.P2P_UNSUPPORTED:
                         Log.w(TAG, "Cannot discover peers: P2P Unsupported");
-                        Toast.makeText(MainActivity.this, "Cannot discover peers", Toast.LENGTH_SHORT).show();
                         break;
                     case WifiP2pManager.ERROR:
                         Log.w(TAG, "Cannot discover peers: Error");
@@ -253,6 +259,10 @@ public class MainActivity extends AppCompatActivity
         displayView(R.id.nav_group);
     }
 
+    public void addGroup(Group group) {
+        mGroups.add(group);
+    }
+
     /**
      * Catches the "OK" event from a TextDialog box. This is used for creating new
      * groups
@@ -261,8 +271,14 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String input) {
-        mGroups.add(new Group(GroupStatus.OWNED, input,
-                Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)));
-        displayView(R.id.nav_group);
+        if (dialog instanceof TextDialogBox) {
+            TextDialogBox dialogBox = (TextDialogBox) dialog;
+            if(dialogBox.getTitle() == getString(R.string.group_create_title)) {
+                WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                mGroups.add(new Group(GroupStatus.OWNED, input,
+                        manager.getConnectionInfo().getMacAddress()));
+                displayView(R.id.nav_group);
+            }
+        }
     }
 }
