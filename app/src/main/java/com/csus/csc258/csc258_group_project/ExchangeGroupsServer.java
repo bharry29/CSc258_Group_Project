@@ -1,37 +1,43 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import org.json.JSONObject;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * This server thread accepts connections on port 8888 and transmits the list of owned
  * groups to any client that connects
  * @author Ben White
  */
-public class ExchangeGroupsServer extends Thread {
+public class ExchangeGroupsServer extends AsyncTask<Void, Void, Void> {
     private MainActivity mActivity;
+    private int mHostPort;
 
     private static final String TAG = "ExchangeGroupsServer";
 
-    public ExchangeGroupsServer(MainActivity activity) {
+    public ExchangeGroupsServer(int hostPort, MainActivity activity) {
         mActivity = activity;
+        mHostPort = hostPort;
     }
 
     @Override
-    public void run() {
+    protected Void doInBackground(Void... params) {
         ServerSocket serverSocket;
         Socket client = null;
         DataOutputStream dataOutputStream = null;
         try {
             Log.i(TAG, "Creating server socket");
 
-            serverSocket = new ServerSocket(8888);
+            serverSocket = new ServerSocket(mHostPort);
 
-            while (true) {
+            while(!isCancelled()) {
+                // TODO: How do we cancel this? One idea is to call serverSocket.close()
+                // from another thread
                 client = serverSocket.accept();
                 Log.i(TAG, "Accepted a connection from " + client.toString());
 
@@ -48,6 +54,7 @@ public class ExchangeGroupsServer extends Thread {
                 dataOutputStream.close();
                 client.close();
             }
+            serverSocket.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,5 +75,7 @@ public class ExchangeGroupsServer extends Thread {
                 }
             }
         }
+
+        return null;
     }
 }

@@ -27,6 +27,8 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private MainActivity mActivity;
+    private ExchangeGroupsClient mExchangeGroupsClient;
+    private ExchangeGroupsServer mExchangeGroupsServer;
 
     // For debug
     private static final String TAG = "GroupBroadcastReceiver";
@@ -64,10 +66,11 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
             if(networkInfo != null && networkInfo.isConnected()) {
                 // We are connected with the other device, request connection info
                 // to find group owner IP
+                Log.d(TAG, "We ARE connected with other devices, requesting info");
                 mManager.requestConnectionInfo(mChannel, this);
             }
             else {
-                Log.d(TAG, "Connection Closed");
+                Log.d(TAG, "Not connected with other devices");
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
@@ -78,32 +81,25 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         for(Object o : mPeers) {
             final WifiP2pDevice device = (WifiP2pDevice) o;
 
-            ExchangeGroupsClient client =
-                    new ExchangeGroupsClient(device.deviceAddress, 8888, mActivity);
-            client.doInBackground(mActivity.getGroups());
-
-
-            /* Commenting out, not going to use the p2p connection manager
-             * for group communication
-
             WifiP2pConfig config = new WifiP2pConfig();
             config.deviceAddress = device.deviceAddress;
             config.wps.setup = WpsInfo.PBC;
 
 
-            mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-                @Override
-                public void onSuccess() {
-                    Log.d(TAG, "Successfully connected to peer " + device.deviceName);
-                }
+            if (device.deviceName != "Device: Roku Stick - 25") {
+                mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d(TAG, "Successfully connected to peer " + device.deviceName);
+                    }
 
-                @Override
-                public void onFailure(int reason) {
-                    Toast.makeText(mActivity, "Connect failed. Retry.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-            */
+                    @Override
+                    public void onFailure(int reason) {
+                        Toast.makeText(mActivity, "Connect failed. Retry.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
     }
 
@@ -112,13 +108,20 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         // After the group negotiation, we can determine the group owner.
         if(info.groupFormed) {
             if (info.isGroupOwner) {
-                // Open a server socket
+                Log.d(TAG, "Current device is group owner, setting up server");
+                mExchangeGroupsServer = new ExchangeGroupsServer(8888, mActivity);
+                mExchangeGroupsServer.execute();
 
             } else {
-                // Open a socket to the group owner
-                InetAddress groupOwnerAdd = info.groupOwnerAddress;
+                // Did we used to be the the server?
+                if (mExchangeGroupsServer != null && !mExchangeGroupsServer.isCancelled()) {
+                    Log.d(TAG, "Used to be server, cancelling server thread");
+                    mExchangeGroupsServer.cancel(true);
+                }
 
-                //new ExchangeGroupsClient().doInBackground()
+                Log.d(TAG, "Current device is not group owner, connecting to owner as client");
+                mExchangeGroupsClient = new ExchangeGroupsClient(info.groupOwnerAddress, 8888, mActivity);
+                mExchangeGroupsClient.execute();
             }
         }
     }

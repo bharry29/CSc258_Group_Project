@@ -132,9 +132,6 @@ public class MainActivity extends AppCompatActivity
 
         displayView(R.id.nav_group);
 
-        // Start the exhange groups server
-        (new ExchangeGroupsServer(this)).start();
-
 
 //        mFiles = new ArrayList<>();
 //        displayView(R.id.nav_file);

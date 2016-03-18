@@ -13,15 +13,15 @@ import java.util.List;
  * Used to connect to a ExchangeGroupsServer and download groups available
  * @author Ben White
  */
-public class ExchangeGroupsClient extends AsyncTask<List<Group>, Void, Void> {
-    private String mHostAddress;
+public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
+    private InetAddress mHostAddress;
     private int mHostPort;
     private MainActivity mActivity;
 
     // For debugging
     private static final String TAG = "ExchangeGroupsClient";
 
-    public ExchangeGroupsClient(String hostAddress, int hostPort, MainActivity activity) {
+    public ExchangeGroupsClient(InetAddress hostAddress, int hostPort, MainActivity activity) {
         mHostAddress = hostAddress;
         mHostPort = hostPort;
         mActivity = activity;
@@ -32,7 +32,7 @@ public class ExchangeGroupsClient extends AsyncTask<List<Group>, Void, Void> {
      * @param params The current list of groups available
      */
     @Override
-    protected Void doInBackground(List<Group>... params) {
+    protected Void doInBackground(Void... params) {
         Socket socket;
         DataInputStream dataInputStream;
         String groupInformation, groupName, groupOwner;
@@ -55,7 +55,7 @@ public class ExchangeGroupsClient extends AsyncTask<List<Group>, Void, Void> {
             groupID = jsondata.getInt("groupID");
             groupOwner = jsondata.getString("deviceAddress");
 
-            for (Group g : params[0]) {
+            for (Group g : mActivity.getGroups()) {
                 if (g.getId() == groupID && g.getDeviceOwnerID() == groupOwner) {
                     haveGroup = true;
                     break;
