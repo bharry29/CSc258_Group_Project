@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity
                 title = "Group";
                 break;
             case R.id.nav_file:
-                fragment = new FileView();
+                fragment = new GroupFileView();
                 title = "File";
                 break;
             case R.id.nav_settings:

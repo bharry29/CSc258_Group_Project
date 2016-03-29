@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * Created by bharr on 3/1/2016.
  */
-    public class File
+    public class GroupFile
     {
         private String mFileName;
 
@@ -16,7 +16,7 @@ import android.view.View;
          * Create a new file object
          * @param name The name of the file
          */
-        public File(String name) {
+        public GroupFile(String name) {
             mFileName = name;
             mFId = View.generateViewId();
         }

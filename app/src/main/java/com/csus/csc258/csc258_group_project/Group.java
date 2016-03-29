@@ -23,7 +23,7 @@ public class Group {
 
 
     // Collection of files
-    private List<File> mFiles;
+    private List<GroupFile> mFiles;
 
     // The name of the group
     private String mGroupName;
@@ -94,23 +94,23 @@ public class Group {
     }
 
 
-    public List<File> getFiles() {
+    public List<GroupFile> getFiles() {
         return mFiles;
     }
 
-    public void deleteFiles(List<File> files) {
+    public void deleteFiles(List<GroupFile> files) {
         mFiles.removeAll(files);
     }
 
-    public void deleteFile(File file) {
+    public void deleteFile(GroupFile file) {
         mFiles.remove(file);
     }
 
-    public void addFile(File file) {
+    public void addFile(GroupFile file) {
         mFiles.add(file);
     }
 
-    public void addFiles(List<File> files) {
+    public void addFiles(List<GroupFile> files) {
         mFiles.addAll(files);
     }
 

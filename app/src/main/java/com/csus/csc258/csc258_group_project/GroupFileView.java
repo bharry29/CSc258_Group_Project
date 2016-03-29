@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * Created by Yulong on 2016/2/4.
  */
-public class FileView extends Fragment implements View.OnClickListener {
+public class GroupFileView extends Fragment implements View.OnClickListener {
     View root_view;
 
 //    private String root;
@@ -35,7 +35,7 @@ public class FileView extends Fragment implements View.OnClickListener {
 
         MainActivity activity = (MainActivity) getActivity();
         for (Group g : activity.getGroups()) {
-            for (File f : g.getFiles()) {
+            for (GroupFile f : g.getFiles()) {
                 addFile(f.getFileName(), f.getFileId());
             }
         }
@@ -59,7 +59,7 @@ public class FileView extends Fragment implements View.OnClickListener {
 
         // A delete button was pressed
         for (Group g : ((MainActivity) getActivity()).getGroups()) {
-            for (File f : g.getFiles()) {
+            for (GroupFile f : g.getFiles()) {
                 if (f.getFileId() == v.getId()) {
                     Button b = (Button) v;
                     // Delete button was pressed
