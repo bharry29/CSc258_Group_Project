@@ -50,11 +50,10 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             TextDialogBox newFileWindow = new TextDialogBox();
             newFileWindow.setHint(getResources().getString(R.string.file_prompt));
             newFileWindow.setTitle(getResources().getString(R.string.add_file_title));
-
-//            Spinner groupsSpinner  = (Spinner) root_view.findViewById(R.id.nav_group);
-//            ArrayAdapter<String> groupDataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groupsList);
-
             newFileWindow.show(getFragmentManager(), "FileName");
+
+            
+
         }
 
         // A delete button was pressed
@@ -80,11 +79,10 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         LinearLayout lNewFile = new LinearLayout(root_view.getContext());
         lNewFile.setOrientation(LinearLayout.HORIZONTAL);
 
-        // Create a new group name
+        // Create a new text file name
         TextView txtFileName = new TextView(new ContextThemeWrapper());
         txtFileName.setText("New File");
         lNewFile.addView(txtFileName);
-
         // Create a new delete button
         Button bDelete = new Button(new ContextThemeWrapper());
         bDelete.setText(getString(R.string.delfilebtn));

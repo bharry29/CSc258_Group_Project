@@ -2,6 +2,7 @@ package com.csus.csc258.csc258_group_project;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Group Editor Fragment. Has the button click event handlers for the group view
@@ -112,7 +116,17 @@ public class GroupView extends Fragment implements View.OnClickListener {
         bButton.setId(id);
         lNewGroup.addView(bButton);
 
+        //create a directory for every group that is created
+        MainActivity activity = (MainActivity)getActivity();
+        for (Group g: activity.getGroups()) {
+            String newGroupDirectoryPath = "/data/data/com.csus.csc258.csc258_group_project/files" + File.separator + txtGroupName;
+            File GroupDirectory = new File(newGroupDirectoryPath);
+            // have the object build the directory structure, if needed.
+            GroupDirectory.mkdirs();
+        }
         // Add the new GroupView to the list of groups
         lGroupList.addView(lNewGroup);
+
+
     }
 }
