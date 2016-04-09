@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
     // Collection of groups
     private List<Group> mGroups;
-
+private List<GroupFile> mGroupFiles;
     public List<String> groupNamesList()
     {
         List<String> groupNamesList = new ArrayList<>();
@@ -291,6 +291,8 @@ public class MainActivity extends AppCompatActivity
     public void addGroup(Group group) {
         mGroups.add(group);
     }
+
+    public void createFile (GroupFile groupfile){mGroupFiles.add(groupfile);}
 
     /**
      * Catches the "OK" event from a TextDialog box. This is used for creating new

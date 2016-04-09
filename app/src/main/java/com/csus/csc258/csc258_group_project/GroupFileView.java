@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,12 +20,9 @@ import java.util.*;
 public class GroupFileView extends Fragment implements View.OnClickListener {
     View root_view;
 
-//    private String root;
-//    private String currentPath;
-//    private File targetFile;
-//
     private ArrayList<Button> bDeleteButtons;
     private Group grp;
+    //private EditText addTextToFile;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root_view = inflater.inflate(R.layout.content_file, container, false);
@@ -36,7 +34,7 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         MainActivity activity = (MainActivity) getActivity();
         for (Group g : activity.getGroups()) {
             for (GroupFile f : g.getFiles()) {
-                addFile(f.getFileName(), f.getFileId());
+                createFile(f.getFileName(), f.getFileId());
             }
         }
         return root_view;
@@ -51,9 +49,6 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             newFileWindow.setHint(getResources().getString(R.string.file_prompt));
             newFileWindow.setTitle(getResources().getString(R.string.add_file_title));
             newFileWindow.show(getFragmentManager(), "FileName");
-
-            
-
         }
 
         // A delete button was pressed
@@ -64,14 +59,12 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
                     // Delete button was pressed
                     if (b.getText().equals(getString(R.string.delfilebtn)))
                         g.deleteFile(f);
-
                 }
             }
         }
-
     }
 
-    private void addFile(String filename, int id) {
+    private void createFile(String filename, int id) {
         // Get the layout for the list of files
         LinearLayout lFileList = (LinearLayout) root_view.findViewById(R.id.llFileList);
 
@@ -83,6 +76,13 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         TextView txtFileName = new TextView(new ContextThemeWrapper());
         txtFileName.setText("New File");
         lNewFile.addView(txtFileName);
+
+
+        // Create a new Text File
+        EditText addTextToFile = (EditText)new EditText(new ContextThemeWrapper());
+        addTextToFile.setText("Enter Your Text here");
+        lNewFile.addView(addTextToFile);
+
         // Create a new delete button
         Button bDelete = new Button(new ContextThemeWrapper());
         bDelete.setText(getString(R.string.delfilebtn));
