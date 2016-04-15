@@ -48,7 +48,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,7 +156,7 @@ private List<GroupFile> mGroupFiles;
         File projDir = new File(dirPath);
         if (!projDir.exists())
             projDir.mkdirs();
-        //Google Drive Initialization
+        //Google Drive Api Initialization
         // the text file in our device's Download folder
         textFile = new File(getFilesDir().getAbsolutePath() + File.separator + device_id
                 + File.separator + "test.txt");
