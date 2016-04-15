@@ -352,6 +352,7 @@ private List<GroupFile> mGroupFiles;
             }
         }
     }
+    /***************************************Google Drive API section **************************************************/
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "in onConnected() - we're connected, let's do the work in the background...");
         Drive.DriveApi.newDriveContents(googleApiClient)
@@ -460,4 +461,5 @@ private List<GroupFile> mGroupFiles;
             Log.e(TAG, "Exception while starting resolution activity", e);
         }
     }
+    /***************************************Google Drive API section End **************************************************/
 }
