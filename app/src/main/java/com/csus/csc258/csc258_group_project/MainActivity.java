@@ -157,9 +157,11 @@ private List<GroupFile> mGroupFiles;
         File projDir = new File(dirPath);
         if (!projDir.exists())
             projDir.mkdirs();
+        //Google Drive Initialization
         // the text file in our device's Download folder
         textFile = new File(getFilesDir().getAbsolutePath() + File.separator + device_id
                 + File.separator + "test.txt");
+        //Api && Connection Initialization
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Drive.API)
                 .addScope(Drive.SCOPE_FILE)
