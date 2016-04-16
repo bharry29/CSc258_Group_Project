@@ -31,8 +31,9 @@ public class GroupView extends Fragment implements View.OnClickListener {
         root_view = inflater.inflate(R.layout.content_group,container, false);
 
         // Setup view objects and default the on click listener
-        ImageButton b = (ImageButton) root_view.findViewById(R.id.btnCreate);
-        b.setOnClickListener(this);
+        ImageButton b;
+        //b = (ImageButton) root_view.findViewById(R.id.btnCreate);
+        //b.setOnClickListener(this);
         b = (ImageButton) root_view.findViewById(R.id.btnRefresh);
         b.setOnClickListener(this);
 
@@ -49,13 +50,14 @@ public class GroupView extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         // The add group button was pressed
-        if(v.getId() == R.id.btnCreate) {
+        /* Removing create group handler */
+        /*if(v.getId() == R.id.btnCreate) {
             TextDialogBox newGroupWindow = new TextDialogBox();
             newGroupWindow.setHint(getResources().getString(R.string.group_create_prompt));
             newGroupWindow.setTitle(getResources().getString(R.string.group_create_title));
             newGroupWindow.show(getFragmentManager(), "groupName");
-        }
-        else if(v.getId() == R.id.btnRefresh) {
+        }*/
+        /*else*/ if(v.getId() == R.id.btnRefresh) {
             ((MainActivity) getActivity()).refreshPeers();
         }
         else {
@@ -76,9 +78,9 @@ public class GroupView extends Fragment implements View.OnClickListener {
         String buttonName = "";
 
         switch (status) {
-            case OWNED:
+            /*case OWNED:
                 buttonName = getString(R.string.group_delete_button);
-                break;
+                break;*/
             case AVAILABLE:
                 buttonName = getString(R.string.group_join_button);
                 break;

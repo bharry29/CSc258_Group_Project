@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.content.Context;
@@ -50,6 +51,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -291,6 +293,47 @@ private List<GroupFile> mGroupFiles;
 
     }
 
+    /**
+     * Update the list of groups available to connect to on the group view
+     * @param peers the wifi peers that have been discovered
+     */
+    public void updateGroups(List<WifiP2pDevice> peers) {
+        boolean groupsChanged = false;
+
+        // Check each available device
+        for(WifiP2pDevice device : peers) {
+            boolean newDevice = true;
+            // See if we already have the device listed or not
+            for(Group g : mGroups)
+                newDevice = newDevice && !device.deviceAddress.equals(g.getDeviceAddress());
+            // Add a new group item if it is a new device
+            if (newDevice) {
+                groupsChanged = true;
+                mGroups.add(new Group(GroupStatus.AVAILABLE, device.deviceName, device.deviceAddress));
+            }
+        }
+
+        // Go through each group and see if it is still available
+        Iterator<Group> groupIterator = mGroups.iterator();
+        while (groupIterator.hasNext()) {
+            Group g = groupIterator.next();
+            boolean deviceAvailable = false;
+            // Check each device
+            for (WifiP2pDevice device : peers)
+                deviceAvailable = deviceAvailable || device.deviceAddress.equals(g.getDeviceAddress());
+
+            // If device is no longer available then remove the group
+            if (!deviceAvailable) {
+                groupsChanged = true;
+                groupIterator.remove();
+            }
+        }
+
+        // Refresh view if there were changes
+        if (groupsChanged)
+            displayView(R.id.nav_group);
+    }
+
     public void refreshPeers() {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
 
@@ -344,12 +387,13 @@ private List<GroupFile> mGroupFiles;
     public void onDialogPositiveClick(DialogFragment dialog, String input) {
         if (dialog instanceof TextDialogBox) {
             TextDialogBox dialogBox = (TextDialogBox) dialog;
-            if(dialogBox.getTitle() == getString(R.string.group_create_title)) {
+            /* Can no longer create group manually, removing handler logic */
+            /*if(dialogBox.getTitle() == getString(R.string.group_create_title)) {
                 WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
                 mGroups.add(new Group(GroupStatus.OWNED, input,
                         manager.getConnectionInfo().getMacAddress()));
                 displayView(R.id.nav_group);
-            }
+            }*/
         }
     }
     /***************************************Google Drive API section **************************************************/

@@ -44,12 +44,15 @@ public class ExchangeGroupsServer extends AsyncTask<Void, Void, Void> {
                 dataOutputStream = new DataOutputStream(client.getOutputStream());
 
                 // Send owned groups to the client
+                /* No longer processing this way, server can only have one group and it is the
+                name of the device which the client will already have
                 for (Group g : mActivity.getGroups()) {
                     if (g.getStatus() == GroupStatus.OWNED) {
                         JSONObject jsondata = g.getJSONData();
                         dataOutputStream.writeUTF(jsondata.toString());
                     }
                 }
+                */
 
                 dataOutputStream.close();
                 client.close();

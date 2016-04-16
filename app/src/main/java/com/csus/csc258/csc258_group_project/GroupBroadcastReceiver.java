@@ -77,10 +77,6 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         }
     }
 
-    public List<WifiP2pDevice> getDevices() {
-        return mPeers;
-    }
-
     private void connectToPeers() {
         for(Object o : mPeers) {
             final WifiP2pDevice device = (WifiP2pDevice) o;
@@ -135,7 +131,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         mPeers.clear();
         if(peerList != null && peerList.getDeviceList() != null) {
             mPeers.addAll(peerList.getDeviceList());
-            connectToPeers();
+            mActivity.updateGroups(mPeers);
         }
 
         if(mPeers.size() == 0)

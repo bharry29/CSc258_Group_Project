@@ -60,7 +60,7 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
             groupOwner = jsondata.getString("deviceAddress");
 
             for (Group g : mActivity.getGroups()) {
-                if (g.getId() == groupID && g.getDeviceOwnerID() == groupOwner) {
+                if (g.getId() == groupID && g.getDeviceAddress().equals(groupOwner)) {
                     haveGroup = true;
                     break;
                 }

@@ -37,12 +37,13 @@
             android:src="@drawable/ic_refresh"
             android:id="@+id/btnRefresh"/>
 
-        <ImageButton
+        <!-- Removing Create Group Button -->
+        <!--ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_group"
             android:text="@string/group_create_button"
-            android:id="@+id/btnCreate"/>
+            android:id="@+id/btnCreate"/-->
 
     </LinearLayout>
 </LinearLayout>

@@ -8,11 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * OWNED = This device is the group owner
+ * OWNED = This device is the group owner (removing since will only have one owned group)
  * JOINED = This device is not the owner but is a group member
  * AVAILABLE = This device is not a member of the groupt but it is available to join
  */
-enum GroupStatus {OWNED, JOINED, AVAILABLE}
+enum GroupStatus {/*OWNED,*/ JOINED, AVAILABLE}
 
 /**
  * Represents a group that is being shared. Groups can be owned by the current user
@@ -65,7 +65,7 @@ public class Group {
      * Gets the id of the device that owns the group
      * @return The ID of the device that owns the group
      */
-    public String getDeviceOwnerID() { return mDeviceAddress; }
+    public String getDeviceAddress() { return mDeviceAddress; }
 
     /**
      * Gets the status of the group
