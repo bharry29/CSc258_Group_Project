@@ -1,6 +1,8 @@
 package com.csus.csc258.csc258_group_project;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.DataInputStream;
@@ -44,6 +46,8 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
         try {
             // Create a new Socket instance and connect to host
             socket = new Socket(mHostAddress, mHostPort);
+
+            Log.i(TAG, "Connected to " + socket.toString());
 
             dataInputStream = new DataInputStream(socket.getInputStream());
 

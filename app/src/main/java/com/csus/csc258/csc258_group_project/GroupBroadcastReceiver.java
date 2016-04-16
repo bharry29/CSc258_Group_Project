@@ -33,7 +33,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     // For debug
     private static final String TAG = "GroupBroadcastReceiver";
 
-    private List mPeers = new ArrayList();
+    private List<WifiP2pDevice> mPeers = new ArrayList();
 
     public GroupBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
                                   MainActivity activity) {
@@ -77,6 +77,10 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         }
     }
 
+    public List<WifiP2pDevice> getDevices() {
+        return mPeers;
+    }
+
     private void connectToPeers() {
         for(Object o : mPeers) {
             final WifiP2pDevice device = (WifiP2pDevice) o;
@@ -86,14 +90,14 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
             config.wps.setup = WpsInfo.PBC;
 
 
-            if (device.deviceName != "Device: Roku Stick - 25") {
+            if (!device.deviceName.toUpperCase().contains("ROKU")) {
                 mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
                         Log.d(TAG, "Successfully connected to peer " + device.deviceName);
                     }
-
                     @Override
+
                     public void onFailure(int reason) {
                         Toast.makeText(mActivity, "Connect failed. Retry.",
                                 Toast.LENGTH_SHORT).show();

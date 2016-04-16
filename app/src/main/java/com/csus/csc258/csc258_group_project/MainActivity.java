@@ -261,6 +261,7 @@ private List<GroupFile> mGroupFiles;
 
         switch (viewId) {
             case R.id.nav_group:
+                refreshPeers();
                 fragment = new GroupView();
                 title = "Group";
                 break;
