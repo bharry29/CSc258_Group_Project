@@ -9,13 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * OWNED = This device is the group owner (removing since will only have one owned group)
- * JOINED = This device is not the owner but is a group member
- * AVAILABLE = This device is not a member of the groupt but it is available to join
- */
-enum GroupStatus {/*OWNED,*/ JOINED, AVAILABLE}
-
-/**
  * Represents a group that is being shared. Groups can be owned by the current user
  * or another peer on the WiFi network.
  * @author Ben White
@@ -29,9 +22,6 @@ public class Group {
     // The name of the group
     private String mGroupName;
 
-    // The status of the group (owned, joined or available to join)
-    private GroupStatus mStatus;
-
     // The id of the group
     private int mId;
 
@@ -43,13 +33,11 @@ public class Group {
 
     /**
      * Create a new group object
-     * @param status The status of the group (owned, joined or available)
      * @param name The name of the group
      * @param device The device that owns the group
-     * @see GroupStatus
+     * @see WifiP2pDevice
      */
-    public Group(GroupStatus status, String name, WifiP2pDevice device) {
-        mStatus = status;
+    public Group(String name, WifiP2pDevice device) {
         mGroupName = name;
         mDevice = device;
         mId = View.generateViewId();
@@ -67,23 +55,6 @@ public class Group {
      * @return The device that owns the group
      */
     public WifiP2pDevice getDevice() { return mDevice; }
-
-    /**
-     * Gets the status of the group
-     * @return The status of the group
-     * @see GroupStatus
-     */
-    public GroupStatus getStatus() {
-        return mStatus;
-    }
-
-    /**
-     * Sets the status of the group
-     * @param status The new status
-     */
-    public void setStats(GroupStatus status) {
-        mStatus = status;
-    }
 
     /** Not using this method
     public JSONObject getJSONData() {

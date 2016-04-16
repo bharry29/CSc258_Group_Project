@@ -11,7 +11,6 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
@@ -134,6 +133,9 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize groups
         mGroups = new ArrayList<>();
+
+        // Initialize files
+        mGroupFiles = new ArrayList<>();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerview = navigationView.getHeaderView(0);
@@ -313,7 +315,7 @@ public class MainActivity extends AppCompatActivity
             // Add a new group item if it is a new device
             if (newDevice) {
                 groupsChanged = true;
-                mGroups.add(new Group(GroupStatus.AVAILABLE, device.deviceName, device));
+                mGroups.add(new Group(device.deviceName, device));
             }
         }
 
@@ -370,6 +372,14 @@ public class MainActivity extends AppCompatActivity
         return mGroups;
     }
 
+    /**
+     * Use for getting the files that are owned by this device
+     * @return The files owned by this device
+     */
+    public List<GroupFile> getGroupFiles() {
+        return mGroupFiles;
+    }
+
     public void deleteGroup(Group group) {
         mGroups.remove(group);
         displayView(R.id.nav_group);
@@ -398,6 +408,10 @@ public class MainActivity extends AppCompatActivity
                         manager.getConnectionInfo().getMacAddress()));
                 displayView(R.id.nav_group);
             }*/
+            if(dialogBox.getTitle().equals(getString(R.string.add_file_title))) {
+                mGroupFiles.add(new GroupFile(input + ".txt"));
+                displayView(R.id.nav_file);
+            }
         }
     }
     /***************************************Google Drive API section **************************************************/

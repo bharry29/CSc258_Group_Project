@@ -22,7 +22,6 @@ public class GroupConnActionListener implements WifiP2pManager.ActionListener {
     @Override
     public void onSuccess() {
         Log.d(TAG, "Successfully connected to peer " + mGroup.getDevice().deviceName);
-        mGroup.setStats(GroupStatus.JOINED);
         mGroupView.updateGroupButton(mGroup);
     }
 

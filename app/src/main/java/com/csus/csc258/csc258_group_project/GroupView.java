@@ -1,6 +1,7 @@
 package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
         // Display the group objects
         MainActivity activity = (MainActivity)getActivity();
         for(Group g : activity.getGroups()) {
-            createGroup(g.getName(), g.getId(), g.getStatus());
+            createGroup(g);
         }
 
 
@@ -57,10 +58,12 @@ public class GroupView extends Fragment implements View.OnClickListener {
         }*/
         /*else*/ if(v.getId() == R.id.btnRefresh) {
             activity.refreshPeers();
+            for (Group g : activity.getGroups())
+                updateGroupButton(g);
         }
         else {
             // See if the view id is one of the groups
-            for (Group g : ((MainActivity) getActivity()).getGroups()) {
+            for (Group g : activity.getGroups()) {
                 if (g.getId() == v.getId()) {
                     Button b = (Button) v;
                     // Delete button was pressed
@@ -75,18 +78,19 @@ public class GroupView extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void createGroup(String input, int id, GroupStatus status) {
+    private void createGroup(Group g) {
 
         String buttonName = "";
 
-        switch (status) {
+        switch (g.getDevice().status) {
             /*case OWNED:
                 buttonName = getString(R.string.group_delete_button);
                 break;*/
-            case AVAILABLE:
+            case WifiP2pDevice.AVAILABLE:
                 buttonName = getString(R.string.group_join_button);
                 break;
-            case JOINED:
+            case WifiP2pDevice.CONNECTED:
+            case WifiP2pDevice.INVITED:
                 buttonName = getString(R.string.group_leave_button);
                 break;
         }
@@ -103,7 +107,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
 
         // Create a new GroupView name
         TextView txtGroupName = new TextView(root_view.getContext());
-        txtGroupName.setText(input);
+        txtGroupName.setText(g.getName());
         // Using deprecated method to support older API's
         txtGroupName.setTextAppearance(root_view.getContext(),
                 android.R.style.TextAppearance_Medium);
@@ -117,7 +121,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
         bButton.setText(buttonName);
         bButton.setOnClickListener(this);
         bButton.setWidth((int) getResources().getDimension(R.dimen.group_button_width));
-        bButton.setId(id);
+        bButton.setId(g.getId());
         lNewGroup.addView(bButton);
 
         //create a directory for every group that is created
@@ -144,8 +148,19 @@ public class GroupView extends Fragment implements View.OnClickListener {
             TextView groupName = (TextView)lGroup.getChildAt(0);
             Button groupButton = (Button)lGroup.getChildAt(1);
             // Are we on the group that we need to change?
-            if(groupName.getText().equals(group.getDevice().deviceName))
-                groupButton.setText(R.string.group_leave_button);
+            if(groupName.getText().equals(group.getDevice().deviceName)) {
+                String buttonName = "";
+                switch (group.getDevice().status) {
+                    case WifiP2pDevice.AVAILABLE:
+                        buttonName = getString(R.string.group_join_button);
+                        break;
+                    case WifiP2pDevice.CONNECTED:
+                    case WifiP2pDevice.INVITED:
+                        buttonName = getString(R.string.group_leave_button);
+                        break;
+                }
+                groupButton.setText(buttonName);
+            }
         }
     }
 }

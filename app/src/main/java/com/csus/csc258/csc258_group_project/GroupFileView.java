@@ -32,10 +32,8 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         b.setOnClickListener(this);
 
         MainActivity activity = (MainActivity) getActivity();
-        for (Group g : activity.getGroups()) {
-            for (GroupFile f : g.getFiles()) {
-                createFile(f.getFileName(), f.getFileId());
-            }
+        for (GroupFile f : activity.getGroupFiles()) {
+            createFile(f.getFileName(), f.getFileId());
         }
         return root_view;
     }
@@ -52,14 +50,13 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         }
 
         // A delete button was pressed
-        for (Group g : ((MainActivity) getActivity()).getGroups()) {
-            for (GroupFile f : g.getFiles()) {
-                if (f.getFileId() == v.getId()) {
-                    Button b = (Button) v;
-                    // Delete button was pressed
-                    if (b.getText().equals(getString(R.string.delfilebtn)))
-                        g.deleteFile(f);
-                }
+        for (GroupFile f : ((MainActivity) getActivity()).getGroupFiles()) {
+            if (f.getFileId() == v.getId()) {
+                Button b = (Button) v;
+                // Delete button was pressed
+                if (b.getText().equals(getString(R.string.delfilebtn)))
+                    //Delete the file
+                    ;
             }
         }
     }
@@ -73,19 +70,20 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         lNewFile.setOrientation(LinearLayout.HORIZONTAL);
 
         // Create a new text file name
-        TextView txtFileName = new TextView(new ContextThemeWrapper());
-        txtFileName.setText("New File");
+        TextView txtFileName = new TextView(root_view.getContext());
+        txtFileName.setText(filename);
         lNewFile.addView(txtFileName);
 
 
         // Create a new Text File
-        EditText addTextToFile = (EditText)new EditText(new ContextThemeWrapper());
+        EditText addTextToFile = (EditText)new EditText(root_view.getContext());
         addTextToFile.setText("Enter Your Text here");
         lNewFile.addView(addTextToFile);
 
         // Create a new delete button
-        Button bDelete = new Button(new ContextThemeWrapper());
+        Button bDelete = new Button(root_view.getContext());
         bDelete.setText(getString(R.string.delfilebtn));
+        bDelete.setId(id);
         bDelete.setOnClickListener(this);
         bDeleteButtons.add(bDelete);
         lNewFile.addView(bDelete);
