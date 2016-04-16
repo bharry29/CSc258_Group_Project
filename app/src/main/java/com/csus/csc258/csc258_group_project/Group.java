@@ -1,5 +1,6 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.util.Log;
 import android.view.View;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class Group {
     // The id of the group
     private int mId;
 
-    // The device owner id
-    private String mDeviceAddress;
+    // The Wifi Direct Device
+    private WifiP2pDevice mDevice;
 
     // For debugging
     private static final String TAG = "Group";
@@ -44,13 +45,13 @@ public class Group {
      * Create a new group object
      * @param status The status of the group (owned, joined or available)
      * @param name The name of the group
-     * @param deviceAddress The MAC address of the owner of the group
+     * @param device The device that owns the group
      * @see GroupStatus
      */
-    public Group(GroupStatus status, String name, String deviceAddress) {
+    public Group(GroupStatus status, String name, WifiP2pDevice device) {
         mStatus = status;
         mGroupName = name;
-        mDeviceAddress = deviceAddress;
+        mDevice = device;
         mId = View.generateViewId();
         mFiles = new ArrayList<>();
     }
@@ -62,10 +63,10 @@ public class Group {
     public String getName() { return mGroupName; }
 
     /**
-     * Gets the id of the device that owns the group
-     * @return The ID of the device that owns the group
+     * Gets the device that owns the group
+     * @return The device that owns the group
      */
-    public String getDeviceAddress() { return mDeviceAddress; }
+    public WifiP2pDevice getDevice() { return mDevice; }
 
     /**
      * Gets the status of the group
@@ -76,6 +77,15 @@ public class Group {
         return mStatus;
     }
 
+    /**
+     * Sets the status of the group
+     * @param status The new status
+     */
+    public void setStats(GroupStatus status) {
+        mStatus = status;
+    }
+
+    /** Not using this method
     public JSONObject getJSONData() {
         JSONObject jsonData = new JSONObject();
 
@@ -92,6 +102,7 @@ public class Group {
 
         return jsonData;
     }
+     */
 
 
     public List<GroupFile> getFiles() {

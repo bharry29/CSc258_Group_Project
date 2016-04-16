@@ -1,8 +1,6 @@
 package com.csus.csc258.csc258_group_project;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +19,9 @@ import java.util.List;
  */
 public class GroupView extends Fragment implements View.OnClickListener {
     View root_view;
+
+    // For debug
+    private static final String TAG = "GroupView";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -49,6 +46,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        final MainActivity activity = (MainActivity) getActivity();
         // The add group button was pressed
         /* Removing create group handler */
         /*if(v.getId() == R.id.btnCreate) {
@@ -58,7 +56,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
             newGroupWindow.show(getFragmentManager(), "groupName");
         }*/
         /*else*/ if(v.getId() == R.id.btnRefresh) {
-            ((MainActivity) getActivity()).refreshPeers();
+            activity.refreshPeers();
         }
         else {
             // See if the view id is one of the groups
@@ -67,7 +65,11 @@ public class GroupView extends Fragment implements View.OnClickListener {
                     Button b = (Button) v;
                     // Delete button was pressed
                     if (b.getText().equals(getString(R.string.group_delete_button)))
-                        ((MainActivity) getActivity()).deleteGroup(g);
+                        activity.deleteGroup(g);
+                    // Join button was pressed
+                    else if (b.getText().equals(getString(R.string.group_join_button)))
+                        ((GroupBroadcastReceiver)activity.getReceiver())
+                                .connectToDevice(g.getDevice(), new GroupConnActionListener(g, this));
                 }
             }
         }
@@ -119,16 +121,31 @@ public class GroupView extends Fragment implements View.OnClickListener {
         lNewGroup.addView(bButton);
 
         //create a directory for every group that is created
-        MainActivity activity = (MainActivity)getActivity();
-        for (Group g: activity.getGroups()) {
-            String newGroupDirectoryPath = "/data/data/com.csus.csc258.csc258_group_project/files" + File.separator + txtGroupName;
-            File GroupDirectory = new File(newGroupDirectoryPath);
-            // have the object build the directory structure, if needed.
-            GroupDirectory.mkdirs();
-        }
+        String newGroupDirectoryPath = "/data/data/com.csus.csc258.csc258_group_project/files" + File.separator + txtGroupName;
+        File GroupDirectory = new File(newGroupDirectoryPath);
+        // have the object build the directory structure, if needed.
+        GroupDirectory.mkdirs();
         // Add the new GroupView to the list of groups
         lGroupList.addView(lNewGroup);
 
 
+    }
+
+    /**
+     * Call this method when the connection status has changed with a group, this will update
+     * the button label
+     * @param group The group that had a status change
+     */
+    public void updateGroupButton(Group group) {
+        LinearLayout lGroupList = (LinearLayout) root_view.findViewById(R.id.llGroupList);
+
+        for(int i = 0; i < lGroupList.getChildCount(); i++) {
+            LinearLayout lGroup = (LinearLayout)lGroupList.getChildAt(i);
+            TextView groupName = (TextView)lGroup.getChildAt(0);
+            Button groupButton = (Button)lGroup.getChildAt(1);
+            // Are we on the group that we need to change?
+            if(groupName.getText().equals(group.getDevice().deviceName))
+                groupButton.setText(R.string.group_leave_button);
+        }
     }
 }

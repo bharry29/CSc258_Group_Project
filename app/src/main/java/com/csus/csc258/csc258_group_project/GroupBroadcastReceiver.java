@@ -1,5 +1,6 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -77,30 +78,24 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         }
     }
 
-    private void connectToPeers() {
-        for(Object o : mPeers) {
-            final WifiP2pDevice device = (WifiP2pDevice) o;
+    public void connectToDevice(WifiP2pDevice device, WifiP2pManager.ActionListener listener) {
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = device.deviceAddress;
+        config.wps.setup = WpsInfo.PBC;
 
-            WifiP2pConfig config = new WifiP2pConfig();
-            config.deviceAddress = device.deviceAddress;
-            config.wps.setup = WpsInfo.PBC;
-
-
-            if (!device.deviceName.toUpperCase().contains("ROKU")) {
-                mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d(TAG, "Successfully connected to peer " + device.deviceName);
-                    }
-                    @Override
-
-                    public void onFailure(int reason) {
-                        Toast.makeText(mActivity, "Connect failed. Retry.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        mManager.connect(mChannel, config, /*new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "Successfully connected to peer " + device.deviceName);
             }
-        }
+            @Override
+
+            public void onFailure(int reason) {
+                Toast.makeText(mActivity, "Connect failed. Retry.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }*/ listener);
+
     }
 
     @Override

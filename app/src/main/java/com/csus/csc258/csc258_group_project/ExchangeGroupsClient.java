@@ -51,6 +51,7 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
 
             dataInputStream = new DataInputStream(socket.getInputStream());
 
+            /** Not sure what we're going to do here yet
             groupInformation = dataInputStream.readUTF();
 
             jsondata = new JSONObject(groupInformation);
@@ -70,12 +71,13 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
                 Group g = new Group(GroupStatus.AVAILABLE, groupName, groupOwner);
                 mActivity.addGroup(g);
             }
+             */
 
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
+        } /* catch (JSONException e) {
             e.printStackTrace();
-        } finally {
+        } */ finally {
 
         }
         return null;

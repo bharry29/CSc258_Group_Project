@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity
     public static DriveId driveID;
     private static final int REQUEST_CODE = 101;
 
-private List<GroupFile> mGroupFiles;
+    private List<GroupFile> mGroupFiles;
+
     public List<String> groupNamesList()
     {
         List<String> groupNamesList = new ArrayList<>();
@@ -225,7 +226,6 @@ private List<GroupFile> mGroupFiles;
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -254,6 +254,10 @@ private List<GroupFile> mGroupFiles;
 
     public boolean getIsWifiP2PEnabled() {
         return mWifiP2PEnabled;
+    }
+
+    public BroadcastReceiver getReceiver() {
+        return mReceiver;
     }
 
     public void displayView(int viewId) {
@@ -305,11 +309,11 @@ private List<GroupFile> mGroupFiles;
             boolean newDevice = true;
             // See if we already have the device listed or not
             for(Group g : mGroups)
-                newDevice = newDevice && !device.deviceAddress.equals(g.getDeviceAddress());
+                newDevice = newDevice && !device.equals(g.getDevice());
             // Add a new group item if it is a new device
             if (newDevice) {
                 groupsChanged = true;
-                mGroups.add(new Group(GroupStatus.AVAILABLE, device.deviceName, device.deviceAddress));
+                mGroups.add(new Group(GroupStatus.AVAILABLE, device.deviceName, device));
             }
         }
 
@@ -320,7 +324,7 @@ private List<GroupFile> mGroupFiles;
             boolean deviceAvailable = false;
             // Check each device
             for (WifiP2pDevice device : peers)
-                deviceAvailable = deviceAvailable || device.deviceAddress.equals(g.getDeviceAddress());
+                deviceAvailable = deviceAvailable || device.equals(g.getDevice());
 
             // If device is no longer available then remove the group
             if (!deviceAvailable) {
