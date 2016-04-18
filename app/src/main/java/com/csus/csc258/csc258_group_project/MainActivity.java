@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -78,10 +79,16 @@ public class MainActivity extends AppCompatActivity
     private List<Group> mGroups;
     // Google drive parameters
     private GoogleApiClient googleApiClient;
-    private File textFile;
+    private File Upload_File;
     public static String drive_id;
     public static DriveId driveID;
     private static final int REQUEST_CODE = 101;
+
+    private static String dirPath;
+    private static String backup_dirPath;
+    private static File projDir;
+    private static File backup_projDir;
+    private static int seconds;
 
     private List<GroupFile> mGroupFiles;
 
@@ -157,22 +164,18 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //setContentView(R.layout.nav_header_main);
         //folder located at /data/data/com.csus.csc258.csc258_group_project/files
-        String dirPath = getFilesDir().getAbsolutePath() + File.separator + device_id;
-        File projDir = new File(dirPath);
+        //File foder and backup folder initialization
+        dirPath = getFilesDir().getAbsolutePath() + File.separator + device_id;
+        projDir = new File(dirPath);
         if (!projDir.exists())
             projDir.mkdirs();
-        //Google Drive Api Initialization
-        // the text file in our device's Download folder
-        textFile = new File(getFilesDir().getAbsolutePath() + File.separator + device_id
-                + File.separator + "test.txt");
-        //Api && Connection Initialization
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Drive.API)
-                .addScope(Drive.SCOPE_FILE)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        googleApiClient.connect();
+
+        backup_dirPath = getFilesDir().getAbsolutePath() + File.separator + "backup";
+        backup_projDir = new File(backup_dirPath);
+        if (!backup_projDir.exists())
+            backup_projDir.mkdirs();
+
+
 
         displayView(R.id.nav_group);
 
@@ -221,8 +224,33 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.nav_group) {
+        if (id == R.id.backup) {
+            File_Compression fc = new File_Compression();
+            fc.deleteDirectory(backup_projDir);
+            backup_projDir.mkdir();
+           fc.zipFileAtPath(dirPath, backup_dirPath+"/CSC258_backup.zip");
+
+            //Google Drive Api Initialization
+            // the text file in our device's Download folder
+            Upload_File = new File(backup_dirPath+"/CSC258_backup.zip");
+            //Api && Connection Initialization
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_FILE)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            googleApiClient.connect();
             return true;
+        }
+        if(id == R.id.rollback){
+            try{
+                File_Compression fc = new File_Compression();
+                fc.deleteDirectory(projDir);
+                fc.unzip(new File(backup_dirPath+"/CSC258_backup.zip"), new File(getFilesDir().getAbsolutePath()));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -437,9 +465,9 @@ public class MainActivity extends AppCompatActivity
                             OutputStream outputStream = driveContents.getOutputStream();
                             addTextfileToOutputStream(outputStream);
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                    .setTitle("testFile")
-                                    .setMimeType("text/plain")
-                                    .setDescription("This is a text file uploaded from device")
+                                    .setTitle("CSC258_backup.zip")
+                                    .setMimeType("application/zip")
+                                    .setDescription("CSc258 backup file")
                                     .setStarred(true).build();
                             Drive.DriveApi.getRootFolder(googleApiClient)
                                     .createFile(googleApiClient, changeSet, driveContents)
@@ -456,7 +484,7 @@ public class MainActivity extends AppCompatActivity
         int bytesRead;
         try {
             BufferedInputStream inputStream = new BufferedInputStream(
-                    new FileInputStream(textFile));
+                    new FileInputStream(Upload_File));
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }

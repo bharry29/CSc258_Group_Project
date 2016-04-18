@@ -2,7 +2,8 @@
     <string name="app_name">CSc258_Group_Project</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="backup">Backup</string>
+    <string name="roolback">Roolback</string>
     <string name="google_app_id">551114541708-og3eksse34bg8d7e9jfkieu8no906dg2.apps.googleusercontent.com</string>
     <string name="group_join_button">Join</string>
     <string name="group_leave_button">Leave</string>
