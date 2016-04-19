@@ -246,7 +246,6 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.rollback){
             try{
                 File_Compression fc = new File_Compression();
-                fc.deleteDirectory(projDir);
                 fc.unzip(new File(backup_dirPath+"/CSC258_backup.zip"), new File(getFilesDir().getAbsolutePath()));
             }catch (Exception e){
                 e.printStackTrace();
