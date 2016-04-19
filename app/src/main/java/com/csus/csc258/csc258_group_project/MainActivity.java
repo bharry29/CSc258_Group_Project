@@ -466,14 +466,13 @@ public class MainActivity extends AppCompatActivity
                             addTextfileToOutputStream(outputStream);
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                                     .setTitle("CSC258_backup.zip")
-                                    .setMimeType("application/zip")
+                                    .setMimeType("text/plain")
                                     .setDescription("CSc258 backup file")
                                     .setStarred(true).build();
                             Drive.DriveApi.getRootFolder(googleApiClient)
                                     .createFile(googleApiClient, changeSet, driveContents)
                                     .setResultCallback(fileCallback);
                         }
-
                     }.start();
                 }
             };
