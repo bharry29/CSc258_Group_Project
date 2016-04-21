@@ -53,7 +53,8 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             TextDialogBox newFileWindow = new TextDialogBox();
             newFileWindow.setHint(getResources().getString(R.string.file_prompt));
             newFileWindow.setTitle(getResources().getString(R.string.add_file_title));
-            newFileWindow.show(getFragmentManager(), "FileName");
+            newFileWindow.show(getFragmentManager(), "FileName")
+            ;
         }
 
         // A delete button was pressed

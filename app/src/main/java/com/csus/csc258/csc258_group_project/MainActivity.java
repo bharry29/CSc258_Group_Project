@@ -408,6 +408,11 @@ public class MainActivity extends AppCompatActivity
 
     public void createFile (GroupFile groupfile){mGroupFiles.add(groupfile);}
 
+    public void deleteGroupFile(GroupFile groupfile) {
+        mGroupFiles.remove(groupfile);
+        displayView(R.id.nav_file);
+    }
+
     /**
      * Catches the "OK" event from a TextDialog box. This is used for creating new
      * groups
