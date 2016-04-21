@@ -12,7 +12,7 @@
     <string name="group_create_title">New Group</string>
     <string name="group_create_prompt">Group Name</string>
 
-    <string name="addfilebtn">Create File</string>
+    <string name="addfilebtn">Create Sample File</string>
     <string name="rnmfilebtn">Rename File</string>
     <string name="delfilebtn">Delete File</string>
     <string name="add_file_title">Create a new file</string>
