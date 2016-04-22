@@ -2,7 +2,9 @@ package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -28,7 +30,6 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
     View root_view;
 
     private ArrayList<Button> bDeleteButtons;
-    private Group grp;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root_view = inflater.inflate(R.layout.content_file, container, false);
@@ -47,14 +48,12 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         final MainActivity activity = (MainActivity) getActivity();
-
         // The "Add File" button was pressed
         if (v.getId() == R.id.addfilebtn) {
             TextDialogBox newFileWindow = new TextDialogBox();
             newFileWindow.setHint(getResources().getString(R.string.file_prompt));
             newFileWindow.setTitle(getResources().getString(R.string.add_file_title));
-            newFileWindow.show(getFragmentManager(), "FileName")
-            ;
+            newFileWindow.show(getFragmentManager(), "FileName");
         }
 
         // A delete button was pressed
@@ -64,9 +63,18 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
                 // Delete button was pressed
                 if (b.getText().equals(getString(R.string.delfilebtn)))
                     activity.deleteGroupFile(f);
+                    deleteFileFromInternalStorage(getActivity(),f.getFileName());
                     //Delete the file
                     ;
             }
+        }
+
+        if (v.getId() == R.id.rnmfilebtn) {
+            TextDialogBox newFileWindow = new TextDialogBox();
+            newFileWindow.setHint(getResources().getString(R.string.file_prompt));
+            newFileWindow.setTitle(getResources().getString(R.string.add_file_title));
+            newFileWindow.show(getFragmentManager(), "FileName");
+            renameGroupFile("");
         }
     }
 
@@ -77,6 +85,9 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         // Create a new row
         LinearLayout lNewFile = new LinearLayout(root_view.getContext());
         lNewFile.setOrientation(LinearLayout.HORIZONTAL);
+        lNewFile.setLayoutParams(new LinearLayout
+                .LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
 
         // Create a new text file name
         TextView txtFileName = new TextView(root_view.getContext());
@@ -89,6 +100,7 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         Button bDelete = new Button(root_view.getContext());
         bDelete.setText(getString(R.string.delfilebtn));
         bDelete.setId(gf.getFileId());
+        bDelete.getId();
         bDelete.setOnClickListener(this);
         bDeleteButtons.add(bDelete);
         lNewFile.addView(bDelete);
@@ -98,13 +110,15 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
     }
 
     public void writeFileOnInternalStorage(Context mcoContext,String sFileName, String sBody){
-        File samplefiledir = new File(mcoContext.getFilesDir(),"sampledata");
+        //File samplefiledir = new File(mcoContext.getFilesDir(),"sampledata");
+        String device_id = getDeviceId(mcoContext);
+        File samplefiledir = new File(mcoContext.getFilesDir().getAbsolutePath() + File.separator + device_id);
         Boolean write_successful = false;
         if(!samplefiledir.exists()){
             samplefiledir.mkdir();
         }
         try{
-            File samplefile = new File(samplefiledir, sFileName+ ".txt");
+            File samplefile = new File(samplefiledir, sFileName);
             FileWriter writer = new FileWriter(samplefile);
             writer.append(sBody);
             writer.flush();
@@ -117,5 +131,46 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             Log.e("ERROR:---", "Could not write file" + e.getMessage());
             write_successful = false;
         }
+    }
+
+    //TODO
+    public void deleteFileFromInternalStorage(Context mcoContext,String sFilename){
+        //File samplefiledir = new File(mcoContext.getFilesDir(),"sampledata");
+        String device_id = getDeviceId(mcoContext);
+        File samplefiledir = new File(mcoContext.getFilesDir().getAbsolutePath() + File.separator + device_id);
+        Boolean isDeleted = null;
+        File f = new File(mcoContext.getFilesDir(),sFilename);
+        try {
+        if(f.exists()) {
+                f.delete();
+                isDeleted = true;
+                Toast.makeText(this.getActivity().getApplicationContext(), "Sample File Deleted Successfully from : " + samplefiledir + "\t with the name:\t" + sFilename, Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                isDeleted = false;
+                Toast.makeText(this.getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(this.getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            isDeleted = false;
+            Log.e("ERROR:---", "Could not delete file" + e.getMessage());
+        }
+    }
+
+    //TODO
+    public void renameGroupFile(String sFilename){
+        Context mcoContext = this.getActivity().getApplicationContext();
+        //File samplefiledir = new File(mcoContext.getFilesDir(),sFilename);
+        String device_id = getDeviceId(mcoContext);
+        File samplefiledir = new File(mcoContext.getFilesDir().getAbsolutePath() + File.separator + device_id);
+        samplefiledir.renameTo(samplefiledir);
+    }
+
+    public String getDeviceId (Context context)
+    {
+        String device_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return device_id;
     }
 }
