@@ -421,6 +421,7 @@ public class MainActivity extends AppCompatActivity
     public void createFile (GroupFile groupfile){mGroupFiles.add(groupfile);}
 
     public void deleteGroupFile(GroupFile groupfile) {
+        groupfile.deleteFile();
         mGroupFiles.remove(groupfile);
         displayView(R.id.nav_file);
     }
@@ -443,7 +444,7 @@ public class MainActivity extends AppCompatActivity
                 displayView(R.id.nav_group);
             }*/
             if(dialogBox.getTitle().equals(getString(R.string.add_file_title))) {
-                mGroupFiles.add(new GroupFile(input + ".txt"));
+                mGroupFiles.add(new GroupFile(input + ".txt", this));
                 displayView(R.id.nav_file);
             }
         }

@@ -1,27 +1,14 @@
 package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by Yulong on 2016/2/4.
@@ -63,9 +50,6 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
                 // Delete button was pressed
                 if (b.getText().equals(getString(R.string.delfilebtn)))
                     activity.deleteGroupFile(f);
-                    deleteFileFromInternalStorage(getActivity(),f.getFileName());
-                    //Delete the file
-                    ;
             }
         }
 
@@ -74,7 +58,7 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             newFileWindow.setHint(getResources().getString(R.string.file_prompt));
             newFileWindow.setTitle(getResources().getString(R.string.add_file_title));
             newFileWindow.show(getFragmentManager(), "FileName");
-            renameGroupFile("");
+            // TODO: Rename the File on the File System
         }
     }
 
@@ -92,7 +76,6 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         // Create a new text file name
         TextView txtFileName = new TextView(root_view.getContext());
         txtFileName.setText(gf.getFileName());
-        writeFileOnInternalStorage(getActivity(),gf.getFileName(),"Sample Body");
         lNewFile.addView(txtFileName);
 
 
@@ -109,68 +92,4 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         lFileList.addView(lNewFile);
     }
 
-    public void writeFileOnInternalStorage(Context mcoContext,String sFileName, String sBody){
-        //File samplefiledir = new File(mcoContext.getFilesDir(),"sampledata");
-        String device_id = getDeviceId(mcoContext);
-        File samplefiledir = new File(mcoContext.getFilesDir().getAbsolutePath() + File.separator + device_id);
-        Boolean write_successful = false;
-        if(!samplefiledir.exists()){
-            samplefiledir.mkdir();
-        }
-        try{
-            File samplefile = new File(samplefiledir, sFileName);
-            FileWriter writer = new FileWriter(samplefile);
-            writer.append(sBody);
-            writer.flush();
-            writer.close();
-            write_successful = true;
-            Toast.makeText(this.getActivity().getApplicationContext(), "Sample File Created Successfully in : " + samplefiledir + "\t with the name:\t"+sFileName , Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e){
-            Toast.makeText(this.getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.e("ERROR:---", "Could not write file" + e.getMessage());
-            write_successful = false;
-        }
-    }
-
-    //TODO
-    public void deleteFileFromInternalStorage(Context mcoContext,String sFilename){
-        //File samplefiledir = new File(mcoContext.getFilesDir(),"sampledata");
-        String device_id = getDeviceId(mcoContext);
-        File samplefiledir = new File(mcoContext.getFilesDir().getAbsolutePath() + File.separator + device_id);
-        Boolean isDeleted = null;
-        File f = new File(mcoContext.getFilesDir(),sFilename);
-        try {
-        if(f.exists()) {
-                f.delete();
-                isDeleted = true;
-                Toast.makeText(this.getActivity().getApplicationContext(), "Sample File Deleted Successfully from : " + samplefiledir + "\t with the name:\t" + sFilename, Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                isDeleted = false;
-                Toast.makeText(this.getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
-            }
-        }
-        catch (Exception e){
-            Toast.makeText(this.getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            isDeleted = false;
-            Log.e("ERROR:---", "Could not delete file" + e.getMessage());
-        }
-    }
-
-    //TODO
-    public void renameGroupFile(String sFilename){
-        Context mcoContext = this.getActivity().getApplicationContext();
-        //File samplefiledir = new File(mcoContext.getFilesDir(),sFilename);
-        String device_id = getDeviceId(mcoContext);
-        File samplefiledir = new File(mcoContext.getFilesDir().getAbsolutePath() + File.separator + device_id);
-        samplefiledir.renameTo(samplefiledir);
-    }
-
-    public String getDeviceId (Context context)
-    {
-        String device_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        return device_id;
-    }
 }
