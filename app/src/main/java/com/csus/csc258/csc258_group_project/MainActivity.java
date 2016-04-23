@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -88,7 +89,11 @@ public class MainActivity extends AppCompatActivity
     public static File projDir;
     public static File backup_projDir;
 
+    public static String groupdirPath;
+
     private List<GroupFile> mGroupFiles;
+
+    private Group mGroup;
 
     public List<String> groupNamesList()
     {
@@ -383,6 +388,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+/*        WifiP2pDevice testDevice = new WifiP2pDevice();
+        mGroups.add(new Group("test",testDevice));
+        mGroups.add(new Group("test2",testDevice));
+        mGroups.add(new Group("test3",testDevice));*/
+
+        createDirsForJoinedGroups(getApplicationContext());
     }
 
     public List<Group> getGroups() {
@@ -435,5 +447,26 @@ public class MainActivity extends AppCompatActivity
                 displayView(R.id.nav_file);
             }
         }
+    }
+
+    //To create a new folder in the device after joining a group
+    public void createDirsForJoinedGroups(Context mcoContext){
+        int grpCount = 0;
+        for (Group g: getGroups()
+                ) {
+            groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + Settings.Secure.getString(mcoContext.getContentResolver(), Settings.Secure.ANDROID_ID) + File.separator + mGroups.get(grpCount).getName();
+            //groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + getPhoneName() + File.separator + mGroups.get(grpCount).getName();
+            projDir = new File(groupdirPath);
+            if (!projDir.exists())
+                projDir.mkdirs();
+            grpCount++;
+        }
+    }
+
+    // This method is added for creating the folder with the device name instead of device id
+    public String getPhoneName() {
+        BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+        String deviceName = myDevice.getName();
+        return deviceName;
     }
 }
