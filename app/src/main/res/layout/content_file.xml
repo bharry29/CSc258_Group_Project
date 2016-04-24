@@ -24,7 +24,7 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/addfilebtn"
+            android:text="@string/file_add_button"
             android:id="@+id/addfilebtn"
             android:enabled="true"
             android:clickable="true"
@@ -37,7 +37,7 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/rnmfilebtn"
+            android:text="@string/file_rename_button"
             android:id="@+id/rnmfilebtn"
             android:layout_alignWithParentIfMissing="false"
             android:allowUndo="false"
@@ -47,7 +47,7 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/delfilebtn"
+            android:text="@string/file_delete_button"
             android:id="@+id/delfilebtn"
             android:enabled="true"
             android:clickable="true"

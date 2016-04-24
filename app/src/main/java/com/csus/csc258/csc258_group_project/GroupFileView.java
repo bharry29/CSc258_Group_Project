@@ -2,26 +2,24 @@ package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import java.util.ArrayList;
 
 /**
- * Created by Yulong on 2016/2/4.
+ * View of files that are owned by various groups
  */
 public class GroupFileView extends Fragment implements View.OnClickListener {
     View root_view;
 
-    private ArrayList<Button> bDeleteButtons;
+    private static final String TAG = "GroupFileView";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root_view = inflater.inflate(R.layout.content_file, container, false);
-        bDeleteButtons = new ArrayList<>();
-        bDeleteButtons.add((Button)root_view.findViewById(R.id.delfilebtn));
         Button b = (Button) root_view.findViewById(R.id.addfilebtn);
         b.setOnClickListener(this);
 
@@ -43,12 +41,16 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             newFileWindow.show(getFragmentManager(), "FileName");
         }
 
-        // A delete button was pressed
+        // See if one of the
         for (GroupFile f : ((MainActivity) getActivity()).getGroupFiles()) {
             if (f.getFileId() == v.getId()) {
                 Button b = (Button) v;
                 // Delete button was pressed
-                if (b.getText().equals(getString(R.string.delfilebtn)))
+                if (b.getText().equals(getString(R.string.file_delete_button)))
+                    if(f.deleteFile())
+                        Log.d(TAG, "Successfully deleted file before removing from group");
+                    else
+                        Log.w(TAG, "Was not able to delete file before removing form group");
                     activity.deleteGroupFile(f);
             }
         }
@@ -81,11 +83,10 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
 
         // Create a new delete button
         Button bDelete = new Button(root_view.getContext());
-        bDelete.setText(getString(R.string.delfilebtn));
+        bDelete.setText(getString(R.string.file_delete_button));
         bDelete.setId(gf.getFileId());
         bDelete.getId();
         bDelete.setOnClickListener(this);
-        bDeleteButtons.add(bDelete);
         lNewFile.addView(bDelete);
 
         // Add the new file to the list of files

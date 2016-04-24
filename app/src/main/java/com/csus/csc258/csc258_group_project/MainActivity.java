@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,29 +29,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveApi;
-import com.google.android.gms.drive.DriveContents;
-import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
-import com.google.android.gms.drive.DriveResource;
-import com.google.android.gms.drive.Metadata;
-import com.google.android.gms.drive.MetadataChangeSet;
-
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -146,6 +126,7 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize files
         mGroupFiles = new ArrayList<>();
+        scanDeviceFolder();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerview = navigationView.getHeaderView(0);
@@ -444,7 +425,8 @@ public class MainActivity extends AppCompatActivity
                 displayView(R.id.nav_group);
             }*/
             if(dialogBox.getTitle().equals(getString(R.string.add_file_title))) {
-                mGroupFiles.add(new GroupFile(input + ".txt", this));
+                String device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                mGroupFiles.add(new GroupFile(input + ".txt", getApplicationContext(), device_id));
                 displayView(R.id.nav_file);
             }
         }
@@ -453,8 +435,7 @@ public class MainActivity extends AppCompatActivity
     //To create a new folder in the device after joining a group
     public void createDirsForJoinedGroups(Context mcoContext){
         int grpCount = 0;
-        for (Group g: getGroups()
-                ) {
+        for (Group g: getGroups()) {
             groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + Settings.Secure.getString(mcoContext.getContentResolver(), Settings.Secure.ANDROID_ID) + File.separator + mGroups.get(grpCount).getName();
             //groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + getPhoneName() + File.separator + mGroups.get(grpCount).getName();
             projDir = new File(groupdirPath);
@@ -469,5 +450,18 @@ public class MainActivity extends AppCompatActivity
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
         String deviceName = myDevice.getName();
         return deviceName;
+    }
+
+    /**
+     * Looks in the local file system for files that already exist on this device
+     * and adds them to the GroupFile list
+     */
+    private void scanDeviceFolder() {
+        String deviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        File dir = new File(getApplicationContext().getFilesDir().getAbsolutePath()
+                + File.separator + deviceID);
+        File[] dirListing = dir.listFiles();
+        for (File f : dirListing)
+            mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID));
     }
 }
