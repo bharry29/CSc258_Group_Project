@@ -124,11 +124,14 @@ public class GroupView extends Fragment implements View.OnClickListener {
         bButton.setId(g.getId());
         lNewGroup.addView(bButton);
 
+        /** I don't think we need this, it is covered in the file creation ~BW 4/24
         //create a directory for every group that is created
         String newGroupDirectoryPath = "/data/data/com.csus.csc258.csc258_group_project/files" + File.separator + txtGroupName;
         File GroupDirectory = new File(newGroupDirectoryPath);
         // have the object build the directory structure, if needed.
         GroupDirectory.mkdirs();
+        */
+
         // Add the new GroupView to the list of groups
         lGroupList.addView(lNewGroup);
 

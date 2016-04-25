@@ -4,8 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Representation of a file that is owned by a group
@@ -27,13 +32,13 @@ import java.io.FileWriter;
          * @param context The application context (used for toast messages)
          * @param deviceID The name of the device (for subfolder creation)
          */
-        public GroupFile(String name, Context context, String deviceID) {
+        public GroupFile(String name, Context context, String deviceID, String content) {
             mFileName = name;
             mContext = context;
             mPath = context.getFilesDir().getAbsolutePath() + File.separator + deviceID;
             mFId = View.generateViewId();
             if (!fileExistsInternalStorage())
-                writeFileOnInternalStorage("Sample Body");
+                writeFileOnInternalStorage(content);
         }
 
         /**
@@ -49,6 +54,8 @@ import java.io.FileWriter;
          * @return The path to the file
          */
         public String getFilePath() { return mPath; }
+
+        public File getFileObject() { return new File(mPath, mFileName);}
 
         public int getFileId() { return mFId; }
 
@@ -72,6 +79,35 @@ import java.io.FileWriter;
                 return false;
         }
 
+        public void createFromInputStream(DataInputStream is) {
+            File f = new File(mPath, mFileName);
+            OutputStream output = null;
+            try {
+                try {
+                    output = new FileOutputStream(f);
+                    byte[] buffer = new byte[1024];
+                    int read;
+
+                    while ((read = is.read(buffer)) != -1)
+                        output.write(buffer, 0, read);
+                    output.flush();
+                }
+                catch (IOException e) {
+                    Log.w(TAG, "createFromInputStream: Couldn't create file from stream.");
+                } finally {
+                    if(output != null)
+                        output.close();
+                }
+
+            } catch (FileNotFoundException e) {
+                Log.w(TAG, "createFromInputStream: File not found " + mFileName);
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.w(TAG, "createFromInputStream: Error closing file stream " + mFileName);
+                e.printStackTrace();
+            }
+        }
+
         /**
          * Writes the file to the internal storage
          * @param sBody The text content of the file
@@ -80,6 +116,7 @@ import java.io.FileWriter;
         private boolean writeFileOnInternalStorage(String sBody){
             File fileDir = new File(mPath);
             Boolean write_successful = false;
+            sBody = sBody == null ? "" : sBody;
             if(!fileDir.exists()){
                 fileDir.mkdir();
             }

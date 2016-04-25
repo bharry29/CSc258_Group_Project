@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -35,11 +36,11 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
      */
     @Override
     protected Void doInBackground(Void... params) {
-        Socket socket;
-        DataInputStream dataInputStream;
-        String groupInformation, groupName, groupOwner;
-        int groupID;
-        JSONObject jsondata;
+        Socket socket = null;
+        DataInputStream dataInputStream = null;
+        DataOutputStream dataOutputStream = null;
+        Group activeGroup = null;
+        String deviceName, fileName;
         // True server sends a group that we already have
         boolean haveGroup = false;
 
@@ -50,35 +51,80 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
             Log.i(TAG, "Connected to " + socket.toString());
 
             dataInputStream = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-            /** Not sure what we're going to do here yet
-            groupInformation = dataInputStream.readUTF();
+            // Get device name
+            deviceName = dataInputStream.readUTF();
 
-            jsondata = new JSONObject(groupInformation);
+            // Send confirmation
+            dataOutputStream.writeUTF(mActivity.getString(R.string.socket_client_received_deviceName));
 
-            groupName = jsondata.getString("groupName");
-            groupID = jsondata.getInt("groupID");
-            groupOwner = jsondata.getString("deviceAddress");
-
-            for (Group g : mActivity.getGroups()) {
-                if (g.getId() == groupID && g.getDeviceAddress().equals(groupOwner)) {
-                    haveGroup = true;
+            // Find active group
+            for(Group g : mActivity.getGroups()) {
+                if(g.getName() == deviceName) {
+                    activeGroup = g;
                     break;
                 }
             }
 
-            if (!haveGroup) {
-                Group g = new Group(GroupStatus.AVAILABLE, groupName, groupOwner);
-                mActivity.addGroup(g);
+            // If couldn't find a group the close connection
+            if(activeGroup == null) {
+                dataInputStream.close();
+                dataOutputStream.close();
+                socket.close();
             }
-             */
+            else {
+                while ((fileName = dataInputStream.readUTF()) != null) {
+                    // Send confirmation
+                    dataOutputStream.writeUTF(mActivity.getString(R.string.socket_client_received_fileName));
+
+                    // Check to see if the file exsits
+                    GroupFile receivedFile = null;
+                    for (GroupFile gf : activeGroup.getFiles()) {
+                        if(gf.getFileName() == fileName) {
+                            receivedFile = gf;
+                            if (receivedFile.deleteFile())
+                                Log.d(TAG, "doInBackground: Deleted existing local copy of " + gf.getFileName());
+                            else
+                                Log.w(TAG, "doInBackground: Was not able to delete " + gf.getFileName());
+                        }
+                    }
+
+                    // If file doesn't exist, then create it
+                    if (receivedFile == null)
+                        receivedFile = new GroupFile(fileName, mActivity.getApplicationContext(), deviceName, "");
+
+                    // Create file content from input stream
+                    receivedFile.createFromInputStream(dataInputStream);
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
-        } /* catch (JSONException e) {
-            e.printStackTrace();
-        } */ finally {
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            if (dataOutputStream != null) {
+                try {
+                    dataOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (dataInputStream != null) {
+                try {
+                    dataInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }

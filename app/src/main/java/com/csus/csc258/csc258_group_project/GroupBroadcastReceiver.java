@@ -30,6 +30,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     private MainActivity mActivity;
     private ExchangeGroupsClient mExchangeGroupsClient;
     private ExchangeGroupsServer mExchangeGroupsServer;
+    private String mDeviceName = "";
 
     // For debug
     private static final String TAG = "GroupBroadcastReceiver";
@@ -47,6 +48,10 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+
+        // Set current device name
+        WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+        mDeviceName = device.deviceName;
 
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
@@ -100,20 +105,20 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
+        // Is there an open server socket? Cancel it
+        if (mExchangeGroupsServer != null && !mExchangeGroupsServer.isCancelled()) {
+            Log.d(TAG, "Found open server socket, cancelling");
+            mExchangeGroupsServer.cancel(true);
+        }
+
         // After the group negotiation, we can determine the group owner.
         if(info.groupFormed) {
             if (info.isGroupOwner) {
                 Log.d(TAG, "Current device is group owner, setting up server");
-                mExchangeGroupsServer = new ExchangeGroupsServer(8888, mActivity);
+                mExchangeGroupsServer = new ExchangeGroupsServer(8888, mActivity, mDeviceName);
                 mExchangeGroupsServer.execute();
 
             } else {
-                // Did we used to be the the server?
-                if (mExchangeGroupsServer != null && !mExchangeGroupsServer.isCancelled()) {
-                    Log.d(TAG, "Used to be server, cancelling server thread");
-                    mExchangeGroupsServer.cancel(true);
-                }
-
                 Log.d(TAG, "Current device is not group owner, connecting to owner as client");
                 mExchangeGroupsClient = new ExchangeGroupsClient(info.groupOwnerAddress, 8888, mActivity);
                 mExchangeGroupsClient.execute();

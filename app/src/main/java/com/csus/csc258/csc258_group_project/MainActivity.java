@@ -426,7 +426,7 @@ public class MainActivity extends AppCompatActivity
             }*/
             if(dialogBox.getTitle().equals(getString(R.string.add_file_title))) {
                 String device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                mGroupFiles.add(new GroupFile(input + ".txt", getApplicationContext(), device_id));
+                mGroupFiles.add(new GroupFile(input + ".txt", getApplicationContext(), device_id, "Sample Content"));
                 displayView(R.id.nav_file);
             }
         }
@@ -462,6 +462,6 @@ public class MainActivity extends AppCompatActivity
                 + File.separator + deviceID);
         File[] dirListing = dir.listFiles();
         for (File f : dirListing)
-            mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID));
+            mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID, null));
     }
 }
