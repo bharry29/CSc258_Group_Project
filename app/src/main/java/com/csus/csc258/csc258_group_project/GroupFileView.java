@@ -41,7 +41,8 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
             newFileWindow.show(getFragmentManager(), "FileName");
         }
 
-        // See if one of the
+        // See if one of the group buttons were pressed
+        GroupFile fileToDelete = null; // Will store file to delete if a delete button was pressed
         for (GroupFile f : ((MainActivity) getActivity()).getGroupFiles()) {
             if (f.getFileId() == v.getId()) {
                 Button b = (Button) v;
@@ -51,9 +52,11 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
                         Log.d(TAG, "Successfully deleted file before removing from group");
                     else
                         Log.w(TAG, "Was not able to delete file before removing form group");
-                    activity.deleteGroupFile(f);
+                    fileToDelete = f;
             }
         }
+        if (fileToDelete != null)
+            activity.deleteGroupFile(fileToDelete);
 
         if (v.getId() == R.id.rnmfilebtn) {
             TextDialogBox newFileWindow = new TextDialogBox();
