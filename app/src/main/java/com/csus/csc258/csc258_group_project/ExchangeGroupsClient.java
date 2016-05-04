@@ -58,10 +58,11 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
 
             // Send confirmation
             dataOutputStream.writeUTF(mActivity.getString(R.string.socket_client_received_deviceName));
+            dataOutputStream.flush();
 
             // Find active group
             for(Group g : mActivity.getGroups()) {
-                if(g.getName() == deviceName) {
+                if(g.getName().equals(deviceName)) {
                     activeGroup = g;
                     break;
                 }
@@ -77,11 +78,12 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
                 while ((fileName = dataInputStream.readUTF()) != null) {
                     // Send confirmation
                     dataOutputStream.writeUTF(mActivity.getString(R.string.socket_client_received_fileName));
+                    dataOutputStream.flush();
 
                     // Check to see if the file exsits
                     GroupFile receivedFile = null;
                     for (GroupFile gf : activeGroup.getFiles()) {
-                        if(gf.getFileName() == fileName) {
+                        if(gf.getFileName().equals(fileName)) {
                             receivedFile = gf;
                             if (receivedFile.deleteFile())
                                 Log.d(TAG, "doInBackground: Deleted existing local copy of " + gf.getFileName());

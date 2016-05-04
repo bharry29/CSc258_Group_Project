@@ -51,7 +51,7 @@ public class ExchangeGroupsServer extends AsyncTask<Void, Void, Void> {
                 dataOutputStream.flush();
 
                 // Wait for confirmation
-                if(dataInputStream.readUTF() == mActivity.getString(R.string.socket_client_received_deviceName)) {
+                if(dataInputStream.readUTF().equals(mActivity.getString(R.string.socket_client_received_deviceName))) {
 
                     // Send the client the files that are on the server
                     for (GroupFile gf : mActivity.getGroupFiles()) {
@@ -60,7 +60,7 @@ public class ExchangeGroupsServer extends AsyncTask<Void, Void, Void> {
                         dataOutputStream.flush();
 
                         // Wait for confirmation
-                        if (dataInputStream.readUTF() == mActivity.getString(R.string.socket_client_received_fileName)) {
+                        if (dataInputStream.readUTF().equals(mActivity.getString(R.string.socket_client_received_fileName))) {
                             // Send the file
                             InputStream inputStream = new FileInputStream(gf.getFileObject());
                             byte buf[] = new byte[1024];

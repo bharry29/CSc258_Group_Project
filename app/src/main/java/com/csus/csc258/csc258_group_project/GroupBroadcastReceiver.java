@@ -49,10 +49,6 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        // Set current device name
-        WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-        mDeviceName = device.deviceName;
-
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
@@ -65,6 +61,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
             mManager.requestPeers(mChannel, this);
             Log.d(TAG, "P2P peers changed");
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+
             // Respond to new connection or disconnections
             NetworkInfo networkInfo = intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
@@ -79,7 +76,9 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
                 Log.d(TAG, "Not connected with other devices");
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-            // Respond to this device's wifi state changing
+            // Set current device name
+            WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            mDeviceName = device.deviceName;
         }
     }
 

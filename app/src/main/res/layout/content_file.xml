@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical"
     android:id="@+id/llFileMain">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textFileHeading"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="File" />
+        android:text="Files:" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/llFileList"
-        android:orientation="horizontal"
-        android:layout_below="@+id/textFileHeading"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:baselineAligned="false">
-        <Button
+        android:orientation="vertical"
+        android:id="@+id/llFileList">
+        <!--Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/file_add_button"
@@ -53,7 +50,7 @@
             android:clickable="true"
             android:layout_centerHorizontal="true"
             android:visibility="invisible"
-            android:layout_weight="1" />
+            android:layout_weight="1" /-->
         </LinearLayout>
 
 <!--    <ListView
@@ -63,5 +60,17 @@
         android:layout_below="@+id/llFileList"
         android:layout_toStartOf="@+id/textFileHeading"
         android:layout_marginTop="36dp" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="right|bottom">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_group"
+            android:id="@+id/btnCreate"/>
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

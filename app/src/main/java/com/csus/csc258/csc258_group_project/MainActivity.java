@@ -461,7 +461,9 @@ public class MainActivity extends AppCompatActivity
         File dir = new File(getApplicationContext().getFilesDir().getAbsolutePath()
                 + File.separator + deviceID);
         File[] dirListing = dir.listFiles();
-        for (File f : dirListing)
-            mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID, null));
+
+        if(dirListing != null)
+            for (File f : dirListing)
+                mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID, null));
     }
 }

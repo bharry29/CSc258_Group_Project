@@ -86,10 +86,16 @@ import java.io.OutputStream;
                 try {
                     output = new FileOutputStream(f);
                     byte[] buffer = new byte[1024];
-                    int read;
+                    int read = is.read(buffer, 0, buffer.length);
+                    int current = read;
 
-                    while ((read = is.read(buffer)) != -1)
+                    do {
                         output.write(buffer, 0, read);
+                        read = is.read(buffer, current, buffer.length);
+                        if (read >= 0)
+                            current += read;
+                    } while (read >= 0);
+
                     output.flush();
                 }
                 catch (IOException e) {
