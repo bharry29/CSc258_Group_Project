@@ -6,8 +6,7 @@
     <string name="roolback">Roolback</string>
     <string name="google_app_id">551114541708-og3eksse34bg8d7e9jfkieu8no906dg2.apps.googleusercontent.com</string>
     <string name="group_join_button">Join</string>
-    <string name="group_leave_button">Leave</string>
-    <string name="group_delete_button">Delete</string>
+    <string name="group_download_button">Get Files</string>
     <string name="group_create_button">Create New Group</string>
     <string name="group_create_title">New Group</string>
     <string name="group_create_prompt">Group Name</string>

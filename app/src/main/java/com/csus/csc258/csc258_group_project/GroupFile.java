@@ -86,15 +86,11 @@ import java.io.OutputStream;
                 try {
                     output = new FileOutputStream(f);
                     byte[] buffer = new byte[1024];
-                    int read = is.read(buffer, 0, buffer.length);
-                    int current = read;
+                    int read;
 
-                    do {
+                    while((read = is.read(buffer)) != -1) {
                         output.write(buffer, 0, read);
-                        read = is.read(buffer, current, buffer.length);
-                        if (read >= 0)
-                            current += read;
-                    } while (read >= 0);
+                    }
 
                     output.flush();
                 }
@@ -136,8 +132,8 @@ import java.io.OutputStream;
                 Toast.makeText(mContext, "Sample File Created Successfully in : " + fileDir + "\t with the name:\t" + mFileName, Toast.LENGTH_SHORT).show();
             }
             catch (Exception e){
-                Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Could not write file" + e.getMessage());
+                Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             return write_successful;

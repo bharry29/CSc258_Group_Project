@@ -67,6 +67,7 @@ public class ExchangeGroupsServer extends AsyncTask<Void, Void, Void> {
                             int len;
                             while ((len = inputStream.read(buf)) != -1)
                                 dataOutputStream.write(buf, 0, len);
+                            dataOutputStream.flush();
                         } else
                             Log.e(TAG, "doInBackground: Didn't successfully send filename " + gf.getFileName());
                     }

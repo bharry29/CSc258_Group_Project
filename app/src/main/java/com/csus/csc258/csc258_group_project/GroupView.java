@@ -67,10 +67,12 @@ public class GroupView extends Fragment implements View.OnClickListener {
                 if (g.getId() == v.getId()) {
                     Button b = (Button) v;
                     // Delete button was pressed
+                    /*
                     if (b.getText().equals(getString(R.string.group_delete_button)))
                         activity.deleteGroup(g);
+                        */
                     // Join button was pressed
-                    else if (b.getText().equals(getString(R.string.group_join_button)))
+                    if (b.getText().equals(getString(R.string.group_join_button)) || b.getText().equals(getString(R.string.group_download_button)))
                         ((GroupBroadcastReceiver)activity.getReceiver())
                                 .connectToDevice(g.getDevice(), new GroupConnActionListener(g, this));
                 }
@@ -91,7 +93,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
                 break;
             case WifiP2pDevice.CONNECTED:
             case WifiP2pDevice.INVITED:
-                buttonName = getString(R.string.group_leave_button);
+                buttonName = getString(R.string.group_download_button);
                 break;
         }
 
@@ -159,7 +161,7 @@ public class GroupView extends Fragment implements View.OnClickListener {
                         break;
                     case WifiP2pDevice.CONNECTED:
                     case WifiP2pDevice.INVITED:
-                        buttonName = getString(R.string.group_leave_button);
+                        buttonName = getString(R.string.group_download_button);
                         break;
                 }
                 groupButton.setText(buttonName);
