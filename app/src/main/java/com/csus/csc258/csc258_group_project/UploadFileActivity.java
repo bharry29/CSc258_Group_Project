@@ -216,55 +216,6 @@ public class UploadFileActivity extends Activity implements
                     Log.i(TAG, "Created a file with content: "
                             + result.getDriveFile().getDriveId());
 
-
-
-
-                   /* SharedPreferences setting = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                    if(setting.getString("Resource_id", null) == null){
-
-
-                        String pageToken = null;
-                        do {
-                            FileList result = driveService.files().list()
-                                    .setQ("mimeType='image/jpeg'")
-                                    .setSpaces("drive")
-                                    .setFields("nextPageToken, files(id, name)")
-                                    .setPageToken(pageToken)
-                                    .execute();
-                            for(File file: result.getFiles()) {
-                                System.out.printf("Found file: %s (%s)\n",
-                                        file.getName(), file.getId());
-                            }
-                            pageToken = result.getNextPageToken();
-                        } while (pageToken != null);
-
-
-
-                        Log.i(TAG, "Previous Version not found.");
-                        SharedPreferences.Editor editor = setting.edit();
-                        editor.putString("Resource_id", result.getDriveFile().getDriveId().toString());
-                        editor.commit();
-                    } else {
-                        Log.i(TAG, "Previous Version deleted.");
-                        String temp = setting.getString("Resource_id", null);
-                        DriveFile driveFile = Drive.DriveApi.getFile(googleApiClient,
-                                DriveId.decodeFromString(temp));
-                        // Call to delete file.
-                        driveFile.trash(googleApiClient).setResultCallback(new ResultCallbacks<Status>() {
-                            @Override
-                            public void onSuccess(Status status) {
-                                Log.i(TAG, "Deletion success");
-                            }
-
-                            @Override
-                            public void onFailure(Status status) {
-                                Log.i(TAG, "Deletion failed");
-                            }
-                        });
-                    }*/
-
-
-
                     Toast.makeText(UploadFileActivity.this,
                             "File successfully added to Drive", Toast.LENGTH_SHORT).show();
                     final PendingResult<DriveResource.MetadataResult> metadata

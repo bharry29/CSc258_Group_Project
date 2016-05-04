@@ -1,14 +1,19 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -17,7 +22,8 @@ import java.util.zip.ZipOutputStream;
  * Created by Yulong on 2016/4/17.
  */
 public class File_Compression {
-
+    public Writer writer;
+    public String absolutePath;
 
 
      /*
@@ -153,6 +159,24 @@ public class File_Compression {
             }
         }
         return( path.delete() );
+    }
+    public void write(String filepath, String fileName, String data) {
+        try {
+        FileInputStream fin = new FileInputStream(data);
+        ZipInputStream zin = new ZipInputStream(fin);
+        ZipEntry ze = null;
+        while ((ze = zin.getNextEntry()) != null) {
+            FileOutputStream fout = new FileOutputStream(filepath+File.separator+fileName);
+            for (int c = zin.read(); c != -1; c = zin.read()) {
+                fout.write(c);
+            }
+            zin.closeEntry();
+            fout.close();
+        }
+        zin.close();
+    }catch (Exception e){
+
+        }
     }
 
 }

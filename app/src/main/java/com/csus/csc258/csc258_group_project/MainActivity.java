@@ -221,8 +221,16 @@ public class MainActivity extends AppCompatActivity
         }
         if(id == R.id.rollback){
             try{
-                File_Compression fc = new File_Compression();
-                fc.unzip(new File(backup_dirPath+"/CSC258_backup.zip"), new File(getFilesDir().getAbsolutePath()));
+
+                Bundle sendBundle = new Bundle();
+                sendBundle.putString("dirPath",dirPath);
+                sendBundle.putString("backPath",backup_dirPath);
+                Intent intent = new Intent(MainActivity.this, DownloadFileActivity.class);
+                intent.putExtras(sendBundle);
+                startActivity(intent);
+
+                /*File_Compression fc = new File_Compression();
+                fc.unzip(new File(backup_dirPath+"/CSc258_backup.zip"), new File(getFilesDir().getAbsolutePath()));*/
             }catch (Exception e){
                 e.printStackTrace();
             }
