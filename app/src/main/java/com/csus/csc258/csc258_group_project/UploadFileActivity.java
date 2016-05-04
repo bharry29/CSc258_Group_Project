@@ -1,28 +1,35 @@
 package com.csus.csc258.csc258_group_project;
 
         import android.app.Activity;
-        import android.app.ProgressDialog;
         import android.content.Intent;
         import android.content.IntentSender;
         import android.os.Bundle;
-        import android.os.Environment;
-        import android.provider.Settings;
         import android.util.Log;
-        import android.view.Window;
         import android.widget.Toast;
         import com.google.android.gms.common.ConnectionResult;
         import com.google.android.gms.common.GooglePlayServicesUtil;
         import com.google.android.gms.common.api.GoogleApiClient;
         import com.google.android.gms.common.api.PendingResult;
         import com.google.android.gms.common.api.ResultCallback;
+        import com.google.android.gms.common.api.ResultCallbacks;
+        import com.google.android.gms.common.api.Status;
         import com.google.android.gms.drive.Drive;
+        import com.google.android.gms.drive.DriveApi;
         import com.google.android.gms.drive.DriveApi.DriveContentsResult;
         import com.google.android.gms.drive.DriveContents;
+
+        import com.google.android.gms.drive.DriveFile;
         import com.google.android.gms.drive.DriveFolder.DriveFileResult;
         import com.google.android.gms.drive.DriveId;
         import com.google.android.gms.drive.DriveResource;
         import com.google.android.gms.drive.Metadata;
+        import com.google.android.gms.drive.MetadataBuffer;
         import com.google.android.gms.drive.MetadataChangeSet;
+        import com.google.android.gms.drive.query.Filters;
+        import com.google.android.gms.drive.query.Query;
+        import com.google.android.gms.drive.query.SearchableField;
+
+
         import java.io.BufferedInputStream;
         import java.io.File;
         import java.io.FileInputStream;
@@ -40,7 +47,10 @@ public class UploadFileActivity extends Activity implements
     public static String dirPath;
     public static String backup_dirPath;
     public static String drive_id;
+    public static final String MyPREFERENCES = "MyPrefs" ;
     public static DriveId driveID;
+    public static String  rid;
+    public static String id;
     private File Upload_File;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +104,42 @@ public class UploadFileActivity extends Activity implements
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "in onConnected() - we're connected, let's do the work in the background...");
+
+        Query query = new Query.Builder()
+                .addFilter(Filters.eq(SearchableField.TITLE, "CSc258_backup.zip"))
+                .build();
+        Drive.DriveApi.query(googleApiClient, query)
+                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+
+
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult result) {
+                        // Iterate over the matching Metadata instances in mdResultSet
+                        Log.i(TAG, "Query success");
+                        if (result != null && result.getStatus().isSuccess()) {
+                            MetadataBuffer mdb = null;
+                            try {
+                                mdb = result.getMetadataBuffer();
+                                if (mdb != null) for (Metadata md : mdb) {
+                                    if (md == null || !md.isDataValid()) continue;
+                                    Log.i(TAG, md.getTitle());
+                                    if (md.getDriveId() != null)
+                                        id = md.getDriveId().toString();
+                                    Log.i(TAG, id);
+                                    //md.get.....();
+                                    DriveFile driveFile = Drive.DriveApi.getFile(googleApiClient, DriveId.decodeFromString(id));
+                                    // Call to delete file.
+                                    driveFile.delete(googleApiClient);
+                                }
+                            } finally {
+                                if (mdb != null) mdb.close();
+                            }
+                        }
+                       }
+                });
+
+
+
         Drive.DriveApi.newDriveContents(googleApiClient)
         .setResultCallback(driveContentsCallback);
     }
@@ -136,7 +182,7 @@ public class UploadFileActivity extends Activity implements
                                     .createFile(googleApiClient, changeSet, driveContents)
                                     .setResultCallback(fileCallback);
                         }
-                     }.start();
+                    }.start();
                 }
             };
     /*get input stream from text file, read it and put into the output stream*/
@@ -169,6 +215,56 @@ public class UploadFileActivity extends Activity implements
                     Log.i(TAG, "File added to Drive");
                     Log.i(TAG, "Created a file with content: "
                             + result.getDriveFile().getDriveId());
+
+
+
+
+                   /* SharedPreferences setting = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    if(setting.getString("Resource_id", null) == null){
+
+
+                        String pageToken = null;
+                        do {
+                            FileList result = driveService.files().list()
+                                    .setQ("mimeType='image/jpeg'")
+                                    .setSpaces("drive")
+                                    .setFields("nextPageToken, files(id, name)")
+                                    .setPageToken(pageToken)
+                                    .execute();
+                            for(File file: result.getFiles()) {
+                                System.out.printf("Found file: %s (%s)\n",
+                                        file.getName(), file.getId());
+                            }
+                            pageToken = result.getNextPageToken();
+                        } while (pageToken != null);
+
+
+
+                        Log.i(TAG, "Previous Version not found.");
+                        SharedPreferences.Editor editor = setting.edit();
+                        editor.putString("Resource_id", result.getDriveFile().getDriveId().toString());
+                        editor.commit();
+                    } else {
+                        Log.i(TAG, "Previous Version deleted.");
+                        String temp = setting.getString("Resource_id", null);
+                        DriveFile driveFile = Drive.DriveApi.getFile(googleApiClient,
+                                DriveId.decodeFromString(temp));
+                        // Call to delete file.
+                        driveFile.trash(googleApiClient).setResultCallback(new ResultCallbacks<Status>() {
+                            @Override
+                            public void onSuccess(Status status) {
+                                Log.i(TAG, "Deletion success");
+                            }
+
+                            @Override
+                            public void onFailure(Status status) {
+                                Log.i(TAG, "Deletion failed");
+                            }
+                        });
+                    }*/
+
+
+
                     Toast.makeText(UploadFileActivity.this,
                             "File successfully added to Drive", Toast.LENGTH_SHORT).show();
                     final PendingResult<DriveResource.MetadataResult> metadata
