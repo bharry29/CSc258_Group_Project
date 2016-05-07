@@ -1,5 +1,6 @@
 package com.csus.csc258.csc258_group_project;
 
+import android.nfc.Tag;
 import android.os.Environment;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -24,7 +26,7 @@ import java.util.zip.ZipOutputStream;
 public class File_Compression {
     public Writer writer;
     public String absolutePath;
-
+    private static final String TAG = "File_Compression--";
 
      /*
  *
@@ -161,22 +163,27 @@ public class File_Compression {
         return( path.delete() );
     }
     public void write(String filepath, String fileName, String data) {
+        String[] args = data.split("");
+        Log.i(TAG, "Zip creation starts.Converting String to zip file:" + args[1]);
         try {
-        FileInputStream fin = new FileInputStream(data);
-        ZipInputStream zin = new ZipInputStream(fin);
-        ZipEntry ze = null;
-        while ((ze = zin.getNextEntry()) != null) {
-            FileOutputStream fout = new FileOutputStream(filepath+File.separator+fileName);
-            for (int c = zin.read(); c != -1; c = zin.read()) {
-                fout.write(c);
+            for (int i = 0; i < args.length; i++) {
+                FileInputStream fin = new FileInputStream(args[i]);
+                ZipInputStream zin = new ZipInputStream(fin);
+                ZipEntry ze = null;
+                while ((ze = zin.getNextEntry()) != null) {
+                    FileOutputStream fout = new FileOutputStream(filepath+File.separator+fileName);
+                    for (int c = zin.read(); c != -1; c = zin.read()) {
+                        fout.write(c);
+                    }
+                    zin.closeEntry();
+                    fout.close();
+                }
+                zin.close();
+                Log.i(TAG, "Zip creation finished.");
             }
-            zin.closeEntry();
-            fout.close();
-        }
-        zin.close();
-    }catch (Exception e){
+        } catch (Exception e) {
 
         }
+
     }
-
 }
