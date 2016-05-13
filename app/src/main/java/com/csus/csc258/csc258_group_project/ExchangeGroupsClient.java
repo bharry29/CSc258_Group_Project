@@ -93,8 +93,10 @@ public class ExchangeGroupsClient extends AsyncTask<Void, Void, Void> {
                     }
 
                     // If file doesn't exist, then create it
-                    if (receivedFile == null)
+                    if (receivedFile == null) {
                         receivedFile = new GroupFile(fileName, mActivity.getApplicationContext(), deviceName, "");
+                        activeGroup.addFile(receivedFile);
+                    }
 
                     // Create file content from input stream
                     receivedFile.createFromInputStream(dataInputStream);

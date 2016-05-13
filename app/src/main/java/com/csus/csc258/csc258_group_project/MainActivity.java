@@ -442,14 +442,24 @@ public class MainActivity extends AppCompatActivity
 
     //To create a new folder in the device after joining a group
     public void createDirsForJoinedGroups(Context mcoContext){
-        int grpCount = 0;
         for (Group g: getGroups()) {
-            groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + Settings.Secure.getString(mcoContext.getContentResolver(), Settings.Secure.ANDROID_ID) + File.separator + mGroups.get(grpCount).getName();
-            //groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + getPhoneName() + File.separator + mGroups.get(grpCount).getName();
+            groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + Settings.Secure.getString(mcoContext.getContentResolver(), Settings.Secure.ANDROID_ID) + File.separator + g.getName();
             projDir = new File(groupdirPath);
             if (!projDir.exists())
                 projDir.mkdirs();
-            grpCount++;
+            // Folder already exists, look for files
+            else {
+                File[] dirListing = projDir.listFiles();
+                for (File f : dirListing)
+                    if (f.isFile()) {
+                        // Look to see if we already have this file in the group
+                        boolean fileExists = false;
+                        for (GroupFile gf : g.getFiles())
+                            fileExists = fileExists || gf.getFileObject().equals(f);
+                        if (!fileExists)
+                            g.addFile(new GroupFile(f.getName(), getApplicationContext(), g.getName(), null));
+                    }
+            }
         }
     }
 
@@ -472,6 +482,8 @@ public class MainActivity extends AppCompatActivity
 
         if(dirListing != null)
             for (File f : dirListing)
-                mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID, null));
+                if (f.isFile())
+                    mGroupFiles.add(new GroupFile(f.getName(), getApplicationContext(), deviceID, null));
+
     }
 }

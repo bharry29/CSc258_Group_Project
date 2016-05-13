@@ -86,6 +86,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
+        config.groupOwnerIntent = 0; // We want to connect as the client, not owner
 
         mManager.connect(mChannel, config, /*new WifiP2pManager.ActionListener() {
             @Override
