@@ -434,7 +434,7 @@ public class MainActivity extends AppCompatActivity
             }*/
             if(dialogBox.getTitle().equals(getString(R.string.add_file_title))) {
                 String device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                mGroupFiles.add(new GroupFile(input + ".txt", getApplicationContext(), device_id, "Sample Content"));
+                mGroupFiles.add(new GroupFile(input + ".txt", getApplicationContext(), device_id, "New text file on device " + device_id));
                 displayView(R.id.nav_file);
             }
         }
@@ -445,6 +445,9 @@ public class MainActivity extends AppCompatActivity
         for (Group g: getGroups()) {
             groupdirPath = mcoContext.getFilesDir().getAbsolutePath() + File.separator + Settings.Secure.getString(mcoContext.getContentResolver(), Settings.Secure.ANDROID_ID) + File.separator + g.getName();
             projDir = new File(groupdirPath);
+            projDir.setWritable(true);
+            projDir.setReadable(true);
+            projDir.setExecutable(true);
             if (!projDir.exists())
                 projDir.mkdirs();
             // Folder already exists, look for files

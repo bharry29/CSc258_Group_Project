@@ -1,7 +1,9 @@
 package com.csus.csc258.csc258_group_project;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +69,32 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         if (fileToDelete != null)
             activity.deleteGroupFile(fileToDelete);
 
+        // See if a file name was clicked
+        if (v instanceof TextView) {
+            TextView txtView = (TextView)v;
+            // Get group ID from delete button
+            int id = ((Button)((LinearLayout)txtView.getParent()).getChildAt(1)).getId();
+            GroupFile fileToOpen = null;
+
+            // See if it is one of the owned files
+            for(GroupFile f : ((MainActivity) getActivity()).getGroupFiles())
+                if (f.getFileId() == id)
+                    fileToOpen = f;
+            // See if it is one of the remote files
+            for(Group g : ((MainActivity) getActivity()).getGroups())
+                for(GroupFile f : g.getFiles())
+                    if (f.getFileId() == id)
+                        fileToOpen = f;
+
+            // Open the file
+            if (fileToOpen != null && txtView.getText().equals(fileToOpen.getFileName())) {
+                Uri uri = Uri.fromFile(fileToOpen.getFileObject());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "text/plain");
+                root_view.getContext().startActivity(intent);
+            }
+        }
+
         /* Removing: Not currently implemented
         if (v.getId() == R.id.rnmfilebtn) {
             TextDialogBox newFileWindow = new TextDialogBox();
@@ -111,14 +139,13 @@ public class GroupFileView extends Fragment implements View.OnClickListener {
         // Create a new text file name
         TextView txtFileName = new TextView(root_view.getContext());
         txtFileName.setText(gf.getFileName());
+        txtFileName.setOnClickListener(this);
         lNewFile.addView(txtFileName);
-
 
         // Create a new delete button
         Button bDelete = new Button(root_view.getContext());
         bDelete.setText(getString(R.string.file_delete_button));
         bDelete.setId(gf.getFileId());
-        bDelete.getId();
         bDelete.setOnClickListener(this);
         lNewFile.addView(bDelete);
 

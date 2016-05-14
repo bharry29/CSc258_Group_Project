@@ -93,6 +93,8 @@ import java.io.OutputStream;
                     }
 
                     output.flush();
+                    f.setReadable(true, false);
+                    f.setWritable(true, false);
                 }
                 catch (IOException e) {
                     Log.w(TAG, "createFromInputStream: Couldn't create file from stream.");
@@ -122,18 +124,21 @@ import java.io.OutputStream;
             if(!fileDir.exists()){
                 fileDir.mkdir();
             }
+            fileDir.setReadable(true, false);
+            fileDir.setWritable(true, false);
+            fileDir.setExecutable(true, false);
             try{
                 File samplefile = new File(fileDir, mFileName);
                 FileWriter writer = new FileWriter(samplefile);
                 writer.append(sBody);
                 writer.flush();
                 writer.close();
+                samplefile.setReadable(true, false);
+                samplefile.setWritable(true, false);
                 write_successful = true;
-                Toast.makeText(mContext, "Sample File Created Successfully in : " + fileDir + "\t with the name:\t" + mFileName, Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e){
-                Log.e(TAG, "Could not write file" + e.getMessage());
-                Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Sample File Created Successfully in : " + fileDir + "\t with the name:\t" + mFileName);
+            } catch (Exception e){
+                Log.e(TAG, "Could not write file " + e.getMessage());
             }
 
             return write_successful;
@@ -156,7 +161,6 @@ import java.io.OutputStream;
                 }
             }
             catch (Exception e){
-                Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
                 isDeleted = false;
                 Log.e(TAG, "Could not delete file" + e.getMessage());
             }

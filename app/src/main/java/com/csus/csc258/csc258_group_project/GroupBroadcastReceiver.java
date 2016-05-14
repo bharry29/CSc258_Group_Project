@@ -105,8 +105,8 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        // Is there an open server socket? Cancel it
-        if (mExchangeGroupsServer != null && !mExchangeGroupsServer.isCancelled()) {
+        // Is there an open server socket? Cancel it if group owner so we can create a new one
+        if (mExchangeGroupsServer != null && !mExchangeGroupsServer.isCancelled() && info.isGroupOwner) {
             Log.d(TAG, "Found open server socket, cancelling");
             mExchangeGroupsServer.cancel(true);
         }
