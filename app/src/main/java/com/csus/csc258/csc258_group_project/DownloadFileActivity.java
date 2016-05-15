@@ -6,6 +6,8 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -168,6 +170,8 @@ public class DownloadFileActivity extends Activity implements
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                    Toast.makeText(DownloadFileActivity.this,
+                            "Rollback Completed", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             };
