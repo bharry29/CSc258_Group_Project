@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity
             try{
 
                 Bundle sendBundle = new Bundle();
-                sendBundle.putString("dirPath",dirPath);
+                sendBundle.putString("dirPath",getFilesDir().getAbsolutePath());
                 sendBundle.putString("backPath",backup_dirPath);
                 Intent intent = new Intent(MainActivity.this, DownloadFileActivity.class);
                 intent.putExtras(sendBundle);

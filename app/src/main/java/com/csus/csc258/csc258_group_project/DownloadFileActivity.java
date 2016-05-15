@@ -26,6 +26,7 @@ import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -35,7 +36,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -97,7 +100,7 @@ public class DownloadFileActivity extends Activity implements
     /*handles connection callbacks*/
     @Override
     public void onConnected(Bundle bundle) {
-
+        Log.i(TAG,"Query Started");
         Query query = new Query.Builder()
                 .addFilter(Filters.eq(SearchableField.TITLE, "CSc258_backup.zip"))
                 .build();
@@ -119,14 +122,17 @@ public class DownloadFileActivity extends Activity implements
                                         temp = md.getWebContentLink().toString();
                                     }
                                     if (temp != null) {
-                                        SharedPreferences settings = getSharedPreferences(MyPREFERENCES, 0);
+
+                                        SharedPreferences settings = getApplicationContext().getSharedPreferences(MyPREFERENCES, 0);
                                         SharedPreferences.Editor editor = settings.edit();
                                         editor.putString("id", temp);
                                         Log.i(TAG, "content link: " + temp);
                                         editor.commit();
                                     }
                                 }
-                            } finally {
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }finally {
                                 if (mdb != null) mdb.close();
                             }
                         }
@@ -171,48 +177,15 @@ public class DownloadFileActivity extends Activity implements
                     // DriveContents object contains pointers
                     // to the actual byte stream
                     DriveContents contents = result.getDriveContents();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
-                    StringBuilder builder = new StringBuilder();
-                    String line;
                     try {
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line);
-                        }
+                        byte[] data =  IOUtils.toByteArray(contents.getInputStream());
+                        Log.i(TAG,Arrays.toString(data));
+                        File_Compression fc = new File_Compression();
+                        fc.write(dirPath,data);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-                    String contentsAsString = builder.toString();
-                    Log.i(TAG,contentsAsString);
-                    File file = new File(backup_dirPath+"/CSc258_backup.zip");
-                    File_Compression fc = new File_Compression();
-                    fc.write(backup_dirPath,"/CSc258_backup.zip",contentsAsString);
-                   /* byte[] array = contentsAsString.getBytes();
-                    ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(contentsAsString.getBytes()));
-                    ZipEntry entry = null;
-
-                    Log.i(TAG,"Zip creation starts.Converting String to zip file:"+array.toString());
-                    try {
-                        while ((entry = zipStream.getNextEntry()) != null) {
-
-                            String entryName = entry.getName();
-
-                            FileOutputStream out = new FileOutputStream(entryName);
-
-                            byte[] byteBuff = new byte[4096];
-                            int bytesRead = 0;
-                            while ((bytesRead = zipStream.read(byteBuff)) != -1) {
-                                out.write(byteBuff, 0, bytesRead);
-                            }
-
-                            out.close();
-                            zipStream.closeEntry();
-                        }
-
-                        zipStream.close();
-                        Log.i(TAG, "Zip creation finished.");
-                    }catch (Exception e){
-
-                    }*/
+                    finish();
                 }
             };
 

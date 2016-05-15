@@ -7,6 +7,7 @@ import android.util.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -162,28 +163,24 @@ public class File_Compression {
         }
         return( path.delete() );
     }
-    public void write(String filepath, String fileName, String data) {
-        String[] args = data.split("");
-        Log.i(TAG, "Zip creation starts.Converting String to zip file:" + args[1]);
+    public void write(String filepath, byte[] bytes) {
         try {
-            for (int i = 0; i < args.length; i++) {
-                FileInputStream fin = new FileInputStream(args[i]);
-                ZipInputStream zin = new ZipInputStream(fin);
-                ZipEntry ze = null;
-                while ((ze = zin.getNextEntry()) != null) {
-                    FileOutputStream fout = new FileOutputStream(filepath+File.separator+fileName);
-                    for (int c = zin.read(); c != -1; c = zin.read()) {
-                        fout.write(c);
-                    }
-                    zin.closeEntry();
-                    fout.close();
-                }
-                zin.close();
-                Log.i(TAG, "Zip creation finished.");
+            ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(bytes));
+            ZipEntry entry = null;
+            while ((entry = zipStream.getNextEntry()) != null) {
+                String entryName = entry.getName();
+                 FileOutputStream out = new FileOutputStream(filepath+ File.separator+entryName);
+                 byte[] byteBuff = new byte[4096];
+                 int bytesRead = 0;
+                 while ((bytesRead = zipStream.read(byteBuff)) != -1) {
+                      out.write(byteBuff, 0, bytesRead);
+                 }
+                 out.close();
+                 zipStream.closeEntry();
             }
-        } catch (Exception e) {
-
+            zipStream.close();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
     }
 }
