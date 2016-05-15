@@ -228,9 +228,6 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, DownloadFileActivity.class);
                 intent.putExtras(sendBundle);
                 startActivity(intent);
-
-                /*File_Compression fc = new File_Compression();
-                fc.unzip(new File(backup_dirPath+"/CSc258_backup.zip"), new File(getFilesDir().getAbsolutePath()));*/
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -250,8 +247,6 @@ public class MainActivity extends AppCompatActivity
             displayView(R.id.nav_group);
         } else if (id == R.id.nav_file) {
             displayView(R.id.nav_file);
-        } else if (id == R.id.nav_settings) {
-            displayView(R.id.nav_settings);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -287,10 +282,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_file:
                 fragment = new GroupFileView();
                 title = "File";
-                break;
-            case R.id.nav_settings:
-                fragment = new setting();
-                title = "Setting";
                 break;
 
         }
