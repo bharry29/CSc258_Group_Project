@@ -48,6 +48,7 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        NetworkInfo networkInfo;
 
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
@@ -60,10 +61,21 @@ public class GroupBroadcastReceiver extends BroadcastReceiver implements
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             mManager.requestPeers(mChannel, this);
             Log.d(TAG, "P2P peers changed");
+
+            // Respond to new connection or disconnections
+            networkInfo = intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+            if(networkInfo != null && networkInfo.isConnected()) {
+                // We are connected with the other device, request connection info
+                // to find group owner IP
+                Log.d(TAG, "P2P peers changed and connected, requesting info");
+                mManager.requestConnectionInfo(mChannel, this);
+            }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
             // Respond to new connection or disconnections
-            NetworkInfo networkInfo = intent
+            networkInfo = intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
             if(networkInfo != null && networkInfo.isConnected()) {
