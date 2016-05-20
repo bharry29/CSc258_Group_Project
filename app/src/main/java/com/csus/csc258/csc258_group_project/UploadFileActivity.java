@@ -36,7 +36,7 @@ package com.csus.csc258.csc258_group_project;
         import java.io.IOException;
         import java.io.OutputStream;
 /**
- * upload a text file from device to Drive
+ * upload a backup file from device to Drive
  */
 public class UploadFileActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -187,7 +187,7 @@ public class UploadFileActivity extends Activity implements
             };
     /*get input stream from text file, read it and put into the output stream*/
     private void addTextfileToOutputStream(OutputStream outputStream) {
-        Log.i(TAG, "adding text file to outputstream...");
+        Log.i(TAG, "adding file to outputstream...");
         byte[] buffer = new byte[1024];
         int bytesRead;
         try {

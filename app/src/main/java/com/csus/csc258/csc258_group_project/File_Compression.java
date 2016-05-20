@@ -28,12 +28,7 @@ public class File_Compression {
     public Writer writer;
     public String absolutePath;
     private static final String TAG = "File_Compression--";
-
-     /*
- *
- * Zips a file at a location and places the resulting zip file at the toLocation
- * Example: zipFileAtPath("downloads/myfolder", "downloads/myFolder.zip");
- */
+    /* Zips a file at a location and places the resulting zip file at the toLocation */
 
     public boolean zipFileAtPath(String sourcePath, String toLocation) {
         // ArrayList<String> contentList = new ArrayList<String>();
@@ -67,11 +62,7 @@ public class File_Compression {
         return true;
     }
 
-/*
- *
- * Zips a subfolder
- *
- */
+/* Zips a subfolder */
 
     private void zipSubFolder(ZipOutputStream out, File folder,
                               int basePathLength) throws IOException {
@@ -101,19 +92,12 @@ public class File_Compression {
             }
         }
     }
-
-    /*
-     * gets the last path component
-     *
-     * Example: getLastPathComponent("downloads/example/fileToZip");
-     * Result: "fileToZip"
-     */
     public String getLastPathComponent(String filePath) {
         String[] segments = filePath.split("/");
         String lastPathComponent = segments[segments.length - 1];
         return lastPathComponent;
     }
-
+    /*Delete the content of a folder */
     public boolean deleteDirectory(File path) {
         if( path.exists() ) {
             File[] files = path.listFiles();
@@ -131,6 +115,8 @@ public class File_Compression {
         }
         return( path.delete() );
     }
+
+    /*Unzip downloaded and save the file back to the folder*/
     public void write(String filepath, byte[] bytes) {
         try {
             ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(bytes));
