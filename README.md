@@ -1,0 +1,2 @@
+# CSc258_Group_Project
+Wi-Fi P2P File Transfer is developed as part of our Spring 2016 term project. This android application is developed using Android Studio through Java and Google Web Services. It also allows the management of a peer(devices) list in a Wi-Fi network using Android's Wi-Fi P2P framework. It has features like file directory management where peers directly share files or subdirectories of files application and also allows the users to keep a cloud backup of the shared directory.
